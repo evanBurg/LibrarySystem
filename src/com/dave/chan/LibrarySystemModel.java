@@ -1,5 +1,9 @@
 package com.dave.chan;
 
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import java.util.ArrayList;
+
 /**
  * Program Name: LibrarySystemModel.java
  * Purpose: this class will be the model part of the app.It will manipulate the data
@@ -23,14 +27,12 @@ public class LibrarySystemModel
     private ArrayList<Row> itemsArrayList = new ArrayList<Row>();
     private ArrayList<ListDataListener> dataListenerList = new ArrayList<ListDataListener>();
 
-    @Override
     public int getSize()
     {
         // this method informs the JList how many ArrayList items are to be displayed
         return itemsArrayList.size();
     }
 
-    @Override
     public String getElementAt(int index)
     {
         if(index < itemsArrayList.size())
@@ -61,19 +63,18 @@ public class LibrarySystemModel
         return null;//leave this here in case an if statement fails above.
     }
 
-    @Override
     public void addListDataListener(ListDataListener listener)
     {
         // register it
         dataListenerList.add(listener);
     }//end method
 
-    @Override
     public void removeListDataListener(ListDataListener listener)
     {
         // if there is a listener,remove it
         if(dataListenerList.contains(listener) )
         {
+            //TEST
             dataListenerList.remove(listener);
         }
     }//end method
