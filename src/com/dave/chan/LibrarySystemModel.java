@@ -46,14 +46,11 @@ public class LibrarySystemModel
                 query.close();
             if(connection != null)
                 connection.close();
-
-            return books;
         }catch (Exception ex){
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
-        }finally {
-
         }
+        return books;
     }
 
     public int getSize()
