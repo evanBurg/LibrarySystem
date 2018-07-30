@@ -2,6 +2,7 @@ package com.dave.chan;
 
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import java.awt.print.Book;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -170,6 +171,118 @@ public class LibrarySystemModel
             ex.printStackTrace();
         }
         return books;
+    }
+
+    public boolean addNewUser(String first_name, String last_name, String email){
+        Connection connection = null;
+        Statement query = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            query.executeUpdate(
+                    "INSERT INTO BORROWER (first_name, last_name, email) " +
+                        "VALUES ('" + first_name + "', '" + last_name + "', '"+ email +"')"
+            );
+
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+
+            return true;
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+
+            return false;
+        }
+    }
+
+    public boolean addNewBook(String title, String isbn, int edition, String subject, ArrayList<String> Authors){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet authors = null;
+        ResultSet book = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            query.executeUpdate(
+                    "INSERT INTO BOOK (title, isbn, edition_number, subject, available) " +
+                            "VALUES ('" + title + "', '" + isbn + "', "+ edition +", " + subject + ", true)"
+            );
+
+            book = query.executeQuery("SELECT BookID * FROM Books WHERE title ='" + title + "' AND ISBN ='" + isbn + "'");
+            if(book.next()) {
+                for (String Author : Authors) {
+
+                    String split[] = Author.split(",");
+                    String first = split[0];
+                    String last = split[1];
+
+                    authors = query.executeQuery("SELECT * FROM author WHERE first_name ='" + first + "' AND last_name = '" + last + "'");
+
+                    //If .next() returns false, there are no existing authors with that name
+                    if (!authors.next())
+                        query.executeUpdate(
+                                "INSERT INTO author (first_name, last_name) " +
+                                        "VALUES ('" + first + "', '" + last + "')"
+                        );
+
+                    //Get the authors ID
+                    authors = query.executeQuery("SELECT AuthorID FROM author WHERE first_name ='" + first + "' AND last_name = '" + last + "'");
+
+                    if(authors.next()) {
+                        query.executeUpdate(
+                                "INSERT INTO BOOK_AUTHOR (Book_BookID, Author_AuthorID) " +
+                                        "VALUES (" + book.getString("BookID") + ", " + authors.getString("AuthorID") + ")"
+                        );
+                    }else{
+                        return false;
+                    }
+                }
+                if(authors != null)
+                    authors.close();
+                if(book != null)
+                    book.close();
+                if (query != null)
+                    query.close();
+                if (connection != null)
+                    connection.close();
+
+                return true;
+            }else{
+                return false;
+            }
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+
+            return false;
+        }
+    }
+
+    public boolean returnABook(int BookID){
+        Connection connection = null;
+        Statement query = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+
+            query.executeUpdate("UPDATE book_loan SET date_returned = CURDATE() WHERE Book_BookID = " + BookID + "");
+            query.executeUpdate("UPDATE book SET available = true WHERE BookID = " + BookID + "");
+
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+
+            return true;
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+
+            return false;
+        }
     }
 
     public int getSize()
