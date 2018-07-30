@@ -17,7 +17,7 @@ public class LibrarySystemView extends JFrame
 	//class-wide
 	JTabbedPane libraryTabbedPane;
 	JFrame libraryFrame;
-	JPanel usersPanel, booksPanel, loansPanel, retrievalPanel;
+	JPanel basePanel, usersPanel, booksPanel, loansPanel, retrievalPanel;
 	JTable usersTable;
 	JScrollPane userTableScrollPane;
 
