@@ -18,7 +18,7 @@ public class LibrarySystemView extends JFrame
 	JTabbedPane libraryTabbedPane;
 	JFrame libraryFrame;
 	JPanel usersPanel, booksPanel, loansPanel, retrievalPanel;
-	JTable usersTabel;
+	JTable usersTable;
 	JScrollPane userTableScrollPane;
 
     public LibrarySystemView()
@@ -44,8 +44,8 @@ public class LibrarySystemView extends JFrame
 				{"Pulling", "Bill","CPA", "bpulling@gmail.com"}
 		};	
 		
-    	usersTabel = new JTable(dummyArray, userColNames);
-    	userTableScrollPane = new JScrollPane(usersTabel);
+    	usersTable = new JTable(dummyArray, userColNames);
+    	userTableScrollPane = new JScrollPane(usersTable);
     	usersPanel.add(userTableScrollPane);
         libraryTabbedPane.add("Users", usersPanel);
         
