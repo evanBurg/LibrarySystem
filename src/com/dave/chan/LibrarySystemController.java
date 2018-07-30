@@ -11,7 +11,18 @@ package com.dave.chan;
  *        on MVC.
  * Date: Jul 12, 2016
  */
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 
 public class LibrarySystemController
 {
@@ -24,7 +35,18 @@ public class LibrarySystemController
     {
         this.theView = view;
         this.theModel = model;
+
+        loadUsers();
+
     }//end constructor
+
+    private void loadUsers(){
+        // TableModel definition
+        String[] userColNames = {"Last Name", "First Name", "E-mail"};
+        DefaultTableModel users = theModel.getAllBorrowers();
+        users.setColumnIdentifiers(userColNames);
+        theView.usersTabel.setModel(users);
+    }
 
     //PUT INNER CLASS HERE
     private class BookListener implements ActionListener
