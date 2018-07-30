@@ -21,10 +21,6 @@ public class MVCLibrarySystemDriver
         //NOW, create an object of the Controller class and pass it the view object
         // and the model object
         LibrarySystemController theController = new LibrarySystemController(theView,theModel);
-
-        //last line...this makes the viewer object visible on screen.
-        theView.setVisible(true);
-
     }
 
 }

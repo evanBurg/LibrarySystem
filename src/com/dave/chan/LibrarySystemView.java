@@ -56,11 +56,5 @@ public class LibrarySystemView extends JFrame
         libraryFrame.setVisible(true);
         
     }//end constructor
-    
-    
-    
-    public static void main (String[] args) {
-    	new LibrarySystemView();
-    }
 
 }//end class

@@ -22,7 +22,8 @@ public class LibrarySystemController
     //constructor will take as arguments objects of the View and the Model
     public LibrarySystemController(LibrarySystemView view, LibrarySystemModel model)
     {
-
+        this.theView = view;
+        this.theModel = model;
     }//end constructor
 
     //PUT INNER CLASS HERE
