@@ -14,11 +14,12 @@ import java.awt.event.*;
 
 public class LibrarySystemView extends JFrame
 {
-    //class-wide
-    JTabbedPane libraryTabbedPane;
-    JPanel basePanel, usersPanel, booksPanel, loansPanel, retrievalPanel;
-    JTable usersTabel;
-    JScrollPane userTableScrollPane;
+	//class-wide
+	JTabbedPane libraryTabbedPane;
+	JFrame libraryFrame;
+	JPanel usersPanel, booksPanel, loansPanel, retrievalPanel;
+	JTable usersTable;
+	JScrollPane userTableScrollPane;
 
     public LibrarySystemView()
     {
@@ -41,13 +42,15 @@ public class LibrarySystemView extends JFrame
         //user table stuff
         String[] userColNames = {"Last Name", "First Name", "E-mail"};
         //dummy data
-        Object[][] dummyArray = {
-                {"Pulling", "Bill","CPA", "bpulling@gmail.com"}
-        };
 
-        usersTabel = new JTable(dummyArray, userColNames);
-        userTableScrollPane = new JScrollPane(usersTabel);
-        usersPanel.add(userTableScrollPane);
+		   Object[][] dummyArray = {
+				{"Pulling", "Bill","CPA", "bpulling@gmail.com"}
+		};	
+		
+    	usersTable = new JTable(dummyArray, userColNames);
+    	userTableScrollPane = new JScrollPane(usersTable);
+    	usersPanel.add(userTableScrollPane);
+      
         libraryTabbedPane.add("Users", usersPanel);
 
 
