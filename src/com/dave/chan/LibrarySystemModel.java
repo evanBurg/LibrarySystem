@@ -2,6 +2,10 @@ package com.dave.chan;
 
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +30,31 @@ public class LibrarySystemModel
 
     private ArrayList<Row> itemsArrayList = new ArrayList<Row>();
     private ArrayList<ListDataListener> dataListenerList = new ArrayList<ListDataListener>();
+
+    public ResultSet getAllBooks(){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet books = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/animals?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            books = query.executeQuery("SELECT * FROM book");
+
+            if(books != null)
+                books.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+
+            return books;
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+        }finally {
+
+        }
+    }
 
     public int getSize()
     {
