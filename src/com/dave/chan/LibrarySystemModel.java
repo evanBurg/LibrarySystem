@@ -3,7 +3,6 @@ package com.dave.chan;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.DefaultTableModel;
-import java.awt.print.Book;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,14 +23,6 @@ import java.util.Vector;
 
 public class LibrarySystemModel
 {
-    private class Row
-    {
-        public String item;
-        public double number;
-        public String size;
-        public String units;
-    }
-
     private ArrayList<Row> itemsArrayList = new ArrayList<Row>();
     private ArrayList<ListDataListener> dataListenerList = new ArrayList<ListDataListener>();
 
@@ -450,4 +441,12 @@ public class LibrarySystemModel
             }//end for
         }//end synchronized block
     }//end method
+
+    private class Row
+    {
+        public String item;
+        public double number;
+        public String size;
+        public String units;
+    }
 }//end class
