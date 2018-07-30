@@ -67,7 +67,7 @@ public class LibrarySystemModel
         }
     }
 
-    public ResultSet getAllBooks(){
+    public DefaultTableModel getAllBooks(){
         Connection connection = null;
         Statement query = null;
         ResultSet books = null;
@@ -77,20 +77,25 @@ public class LibrarySystemModel
             query = connection.createStatement();
             books = query.executeQuery("SELECT * FROM book");
 
+            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+
             if(books != null)
                 books.close();
             if(query != null)
                 query.close();
             if(connection != null)
                 connection.close();
+
+            return theBooks;
         }catch (Exception ex){
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
+
+            return null;
         }
-        return books;
     }
 
-    public ResultSet getAllLoanedBooks(){
+    public DefaultTableModel getAllLoanedBooks(){
         Connection connection = null;
         Statement query = null;
         ResultSet books = null;
@@ -100,20 +105,26 @@ public class LibrarySystemModel
             query = connection.createStatement();
             books = query.executeQuery("SELECT * FROM book WHERE Available = 0");
 
+            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+
+
             if(books != null)
                 books.close();
             if(query != null)
                 query.close();
             if(connection != null)
                 connection.close();
+
+            return theBooks;
         }catch (Exception ex){
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
+
+            return null;
         }
-        return books;
     }
 
-    public ResultSet getBooksbySubject(String subject){
+    public DefaultTableModel getBooksbySubject(String subject){
         Connection connection = null;
         Statement query = null;
         ResultSet books = null;
@@ -123,20 +134,25 @@ public class LibrarySystemModel
             query = connection.createStatement();
             books = query.executeQuery("SELECT * FROM book WHERE Subject = '" + subject + "'");
 
+            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+
             if(books != null)
                 books.close();
             if(query != null)
                 query.close();
             if(connection != null)
                 connection.close();
+
+            return theBooks;
         }catch (Exception ex){
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
+
+            return null;
         }
-        return books;
     }
 
-    public ResultSet getBooksbyAuthor(String last_name){
+    public DefaultTableModel getBooksbyAuthor(String last_name){
         Connection connection = null;
         Statement query = null;
         ResultSet books = null;
@@ -149,17 +165,22 @@ public class LibrarySystemModel
                     "INNER JOIN info5051_books.author\n" +
                     "WHERE last_name = '" + last_name + "'");
 
+            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+
             if(books != null)
                 books.close();
             if(query != null)
                 query.close();
             if(connection != null)
                 connection.close();
+
+            return theBooks;
         }catch (Exception ex){
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
+
+            return null;
         }
-        return books;
     }
 
     public DefaultTableModel getAllBorrowers(){
@@ -189,7 +210,7 @@ public class LibrarySystemModel
         return new DefaultTableModel();
     }
 
-    public ResultSet getOverdueBooks(){
+    public DefaultTableModel getOverdueBooks(){
         Connection connection = null;
         Statement query = null;
         ResultSet books = null;
@@ -203,17 +224,22 @@ public class LibrarySystemModel
                         "WHERE CURDATE() > info5051_books.book_loan.date_due AND info5051_books.book_loan.date_returned IS NULL;"
             );
 
+            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+
             if(books != null)
                 books.close();
             if(query != null)
                 query.close();
             if(connection != null)
                 connection.close();
+
+            return theBooks;
         }catch (Exception ex){
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
+
+            return null;
         }
-        return books;
     }
 
     public boolean addNewUser(String first_name, String last_name, String email){
