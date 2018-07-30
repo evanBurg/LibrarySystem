@@ -26,48 +26,52 @@ public class LibrarySystemView extends JFrame
         //boilerplate
         super("Library System");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new FlowLayout());
+        this.setLayout(new BorderLayout() );//ANONYMOUS layout object
         this.setSize(500,500);
         this.setLocationRelativeTo(null);
-        
-        libraryFrame = new JFrame();
+
+        basePanel = new JPanel(new FlowLayout());
+        this.add(basePanel, BorderLayout.CENTER);
+
         libraryTabbedPane = new JTabbedPane();
-        libraryFrame.add(libraryTabbedPane);
-        
+        basePanel.add(libraryTabbedPane);
+
         //Users Section
         usersPanel = new JPanel();
-        
+
         //user table stuff
         String[] userColNames = {"Last Name", "First Name", "E-mail"};
         //dummy data
-		Object[][] dummyArray = {
+
+		   Object[][] dummyArray = {
 				{"Pulling", "Bill","CPA", "bpulling@gmail.com"}
 		};	
 		
     	usersTable = new JTable(dummyArray, userColNames);
     	userTableScrollPane = new JScrollPane(usersTable);
     	usersPanel.add(userTableScrollPane);
+      
         libraryTabbedPane.add("Users", usersPanel);
-        
-        
+
+
         //Books Section
         booksPanel = new JPanel();
-        
+
         libraryTabbedPane.addTab("Books", booksPanel);
-        
+
         //Loans Section
         loansPanel = new JPanel();
-        
+
         libraryTabbedPane.addTab("Loans", loansPanel);
-        
+
         //Retrieval Section
         retrievalPanel = new JPanel();
-        
+
         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
-        
+
         //display it
-        libraryFrame.setVisible(true);
-        
+        this.setVisible(true);
+
     }//end constructor
-    
+
 }//end class
