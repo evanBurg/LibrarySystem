@@ -68,12 +68,13 @@ public class LibrarySystemModel
         // register it
         dataListenerList.add(listener);
     }//end method
-    
+
     public void removeListDataListener(ListDataListener listener)
     {
         // if there is a listener,remove it
         if(dataListenerList.contains(listener) )
         {
+            //TEST
             dataListenerList.remove(listener);
         }
     }//end method

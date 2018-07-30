@@ -18,7 +18,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/dave/chan/LibrarySystemModel.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="299">
-              <caret line="70" column="4" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
+              <caret line="76" column="18" selection-start-line="76" selection-start-column="18" selection-end-line="76" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#811#829#0" expanded="true" />
@@ -195,12 +195,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1532970592768</updated>
-      <workItem from="1532970595703" duration="341000" />
+      <workItem from="1532970595703" duration="680000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="341000" />
+    <option name="totallyTimeSpent" value="680000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -269,7 +269,7 @@
     <entry file="file://$PROJECT_DIR$/src/com/dave/chan/LibrarySystemModel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
-          <caret line="70" column="4" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
+          <caret line="76" column="18" selection-start-line="76" selection-start-column="18" selection-end-line="76" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#811#829#0" expanded="true" />
