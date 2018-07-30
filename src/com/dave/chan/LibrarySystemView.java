@@ -10,7 +10,6 @@ package com.dave.chan;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class LibrarySystemView extends JFrame
 {

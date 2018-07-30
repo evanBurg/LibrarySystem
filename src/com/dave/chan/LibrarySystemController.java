@@ -11,17 +11,10 @@ package com.dave.chan;
  *        on MVC.
  * Date: Jul 12, 2016
  */
-import javax.swing.*;
+
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 
 public class LibrarySystemController
