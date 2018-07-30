@@ -48,6 +48,13 @@ public class LibrarySystemController
         theView.usersTabel.setModel(users);
     }
 
+    private void loadBooks(){
+        String[] bookColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Available"};
+        DefaultTableModel books = theModel.getAllBooks();
+        books.setColumnIdentifiers(bookColNames);
+        //theView.booksTable.setModel(books);
+    }
+
     //PUT INNER CLASS HERE
     private class BookListener implements ActionListener
     {
