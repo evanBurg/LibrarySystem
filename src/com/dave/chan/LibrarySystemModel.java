@@ -37,8 +37,127 @@ public class LibrarySystemModel
         ResultSet books = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/animals?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             books = query.executeQuery("SELECT * FROM book");
+
+            if(books != null)
+                books.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return books;
+    }
+
+    public ResultSet getAllLoanedBooks(){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet books = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            books = query.executeQuery("SELECT * FROM book WHERE Available = 0");
+
+            if(books != null)
+                books.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return books;
+    }
+
+    public ResultSet getBooksbySubject(String subject){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet books = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            books = query.executeQuery("SELECT * FROM book WHERE Subject = '" + subject + "'");
+
+            if(books != null)
+                books.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return books;
+    }
+
+    public ResultSet getBooksbyAuthor(String last_name){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet books = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            books = query.executeQuery(
+                    "SELECT * FROM info5051_books.book\n" +
+                    "INNER JOIN info5051_books.author\n" +
+                    "WHERE last_name = '" + last_name + "'");
+
+            if(books != null)
+                books.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return books;
+    }
+
+    public ResultSet getAllBorrowers(){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet borrowers = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            borrowers = query.executeQuery(
+                    "SELECT * FROM borrower");
+
+            if(borrowers != null)
+                borrowers.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return borrowers;
+    }
+
+    public ResultSet getOverdueBooks(){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet books = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            books = query.executeQuery(
+                    "SELECT * FROM info5051_books.book\n" +
+                        "INNER JOIN info5051_books.book_loan\n" +
+                        "INNER JOIN info5051_books.borrower\n" +
+                        "WHERE CURDATE() > info5051_books.book_loan.date_due AND info5051_books.book_loan.date_returned IS NULL;"
+            );
 
             if(books != null)
                 books.close();
