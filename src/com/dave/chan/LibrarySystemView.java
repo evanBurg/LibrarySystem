@@ -18,6 +18,9 @@ public class LibrarySystemView extends JFrame
 	JTabbedPane libraryTabbedPane;
 	JFrame libraryFrame;
 	JPanel usersPanel, booksPanel, loansPanel, retrievalPanel;
+	JTable usersTabel;
+	JScrollPane userTableScrollPane;
+
     public LibrarySystemView()
     {
         //boilerplate
@@ -34,6 +37,16 @@ public class LibrarySystemView extends JFrame
         //Users Section
         usersPanel = new JPanel();
         
+        //user table stuff
+        String[] userColNames = {"Last Name", "First Name", "E-mail"};
+        //dummy data
+		Object[][] dummyArray = {
+				{"Pulling", "Bill","CPA", "bpulling@gmail.com"}
+		};	
+		
+    	usersTabel = new JTable(dummyArray, userColNames);
+    	userTableScrollPane = new JScrollPane(usersTabel);
+    	usersPanel.add(userTableScrollPane);
         libraryTabbedPane.add("Users", usersPanel);
         
         
@@ -56,5 +69,5 @@ public class LibrarySystemView extends JFrame
         libraryFrame.setVisible(true);
         
     }//end constructor
-
+    
 }//end class
