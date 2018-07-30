@@ -31,6 +31,7 @@ public class LibrarySystemController
 
         loadUsers();
         loadBooks();
+        loadLoans();
     }//end constructor
 
     private void loadUsers(){
@@ -53,6 +54,10 @@ public class LibrarySystemController
         DefaultTableModel loans = theModel.getAllLoanedBooks();
         loans.setColumnIdentifiers(loanColNames);
         //theView.loansTable.setModel(books);
+    }
+
+    public void updateBorrowers(){
+        theModel.updateBorrowers((DefaultTableModel)theView.usersTable.getModel());
     }
 
     //PUT INNER CLASS HERE
