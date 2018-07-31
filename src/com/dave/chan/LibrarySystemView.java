@@ -27,7 +27,35 @@ public class LibrarySystemView extends JFrame
 	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel;
 	JTextArea bookTitleTextArea, bookEditionTextArea, bookSubjectTextArea, bookAuthorFNTextArea;
 	AddUserDialog addUserDialog;
+	NewLoanDialog newLoanDialogue;
 
+	public class NewLoanDialog extends JFrame{
+	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
+        JTextArea addUserFirstName, addUserLastName, addUserEmail;
+        public NewLoanDialog(){
+            super("Library System");
+            this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            this.setLayout(new FlowLayout() );//ANONYMOUS layout object
+            this.setSize(500,200);
+            this.setLocationRelativeTo(null);
+
+            addUserFirstNameLabel = new JLabel("First Name:");
+            addUserLastNameLabel = new JLabel("Last Name:");
+            addUserEmailLabel = new JLabel("Email:");
+
+            addUserFirstName = new JTextArea(1, 7);
+            addUserLastName = new JTextArea(1, 7);
+            addUserEmail = new JTextArea(1, 7);
+
+            this.add(addUserFirstNameLabel);
+            this.add(addUserFirstName);
+            this.add(addUserLastNameLabel);
+            this.add(addUserLastName);
+            this.add(addUserEmailLabel);
+            this.add(addUserEmail);
+        }
+    }
+	
 	public class AddUserDialog extends JFrame{
 	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
         JTextArea addUserFirstName, addUserLastName, addUserEmail;
@@ -85,6 +113,7 @@ public class LibrarySystemView extends JFrame
     	usersNewButton = new JButton("Add New User");
     	
     	usersButtonPanel.add(usersNewButton);
+        addUserDialog = new AddUserDialog();
     	usersButtonPanel.add(usersUpdateButton);
     	usersButtonPanel.add(usersSaveButton);
     	
@@ -155,9 +184,7 @@ public class LibrarySystemView extends JFrame
                 }
             }
             });
-
-        
-               
+             
         bookFormPanel.add(bookTitleLabel);
         bookFormPanel.add(bookTitleTextArea);
         bookFormPanel.add(bookEditionLabel);
@@ -188,24 +215,21 @@ public class LibrarySystemView extends JFrame
         
         loansButtonPanel = new JPanel();
         loansCheckOutBtn = new JButton("Check Out Book");
+        newLoanDialogue = new NewLoanDialog();
         loansCheckInBtn = new JButton("Check In Book");
         loansButtonPanel.add(loansCheckOutBtn);
         loansButtonPanel.add(loansCheckInBtn);
         
         loansPanel.add(loansButtonPanel, BorderLayout.SOUTH);
         
-
         //booksListTable = new JTable();
 
         libraryTabbedPane.addTab("Loans", loansPanel);
-
 
         //Retrieval Section
         retrievalPanel = new JPanel();
 
         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
-
-        addUserDialog = new AddUserDialog();
 
         //display it
         this.setVisible(true);
