@@ -82,8 +82,7 @@ public class LibrarySystemController
                 theView.usersTable.setEnabled(true);
             }
             if(e.getSource().equals(theView.usersNewButton)){
-                addNewUser();
-                loadUsers();
+                theView.addUserDialog.setVisible(true);
             }
         }
 
