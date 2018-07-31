@@ -1,5 +1,6 @@
 package com.dave.chan;
 
+import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.DefaultTableModel;
@@ -115,7 +116,7 @@ public class LibrarySystemModel
         }
     }
 
-    public ArrayList<String> getAllSubjects(){
+    public DefaultComboBoxModel getAllSubjects(){
         Connection connection = null;
         Statement query = null;
         ResultSet books = null;
@@ -125,11 +126,11 @@ public class LibrarySystemModel
             query = connection.createStatement();
             books = query.executeQuery("SELECT subject FROM book");
 
-            ArrayList<String> theBooks = new ArrayList<String>();
-            theBooks.add("Choose a Subject");
+            DefaultComboBoxModel theBooks = new DefaultComboBoxModel();
+            theBooks.addElement("Choose a Subject");
 
             while(books.next()){
-                theBooks.add(books.getString("subject"));
+                theBooks.addElement(books.getString("subject"));
             }
 
             if(books != null)
@@ -148,7 +149,7 @@ public class LibrarySystemModel
         }
     }
 
-    public ArrayList<String> getAllAuthors(){
+    public DefaultComboBoxModel getAllAuthors(){
         Connection connection = null;
         Statement query = null;
         ResultSet authors = null;
@@ -158,12 +159,12 @@ public class LibrarySystemModel
             query = connection.createStatement();
             authors = query.executeQuery("SELECT first_name, last_name FROM author");
 
-            ArrayList<String> theAuthors = new ArrayList<String>();
-            theAuthors.add("Choose an Author");
+            DefaultComboBoxModel theAuthors = new DefaultComboBoxModel();
+            theAuthors.addElement("Choose an Author");
 
 
             while(authors.next()){
-                theAuthors.add(authors.getString("last_name") + ", " + authors.getString("first_name"));
+                theAuthors.addElement(authors.getString("last_name") + ", " + authors.getString("first_name"));
             }
 
             if(authors != null)
