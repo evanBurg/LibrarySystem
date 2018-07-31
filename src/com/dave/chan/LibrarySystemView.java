@@ -305,12 +305,12 @@ public class LibrarySystemView extends JFrame
         //unverified if it works yet but hoping it does
         BoundsPopupMenuListener listener = new BoundsPopupMenuListener(true, false);
         authorComboBox.addPopupMenuListener( listener );
-        authorComboBox.setPrototypeDisplayValue("Dickens, CharlesWWWWWW");
+        authorComboBox.setPrototypeDisplayValue("Choose an Author");
         authorComboBox.setEditable(false);
         searchUIPanel.add(authorComboBox);
 
         subjectComboBox.addPopupMenuListener( listener );
-        subjectComboBox.setPrototypeDisplayValue("Java");
+        subjectComboBox.setPrototypeDisplayValue("Choose a Subject");
         subjectComboBox.setEditable(false);
         searchUIPanel.add(subjectComboBox);
         

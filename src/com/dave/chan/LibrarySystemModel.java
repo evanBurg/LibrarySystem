@@ -95,7 +95,11 @@ public class LibrarySystemModel
         try{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
-            books = query.executeQuery("SELECT * FROM book WHERE Available = 0");
+            //"SELECT BookID, Title, ISBN, Edition_Number, Subject, Available
+            // FROM book bks INNER JOIN book_author bkath ON bks.BookID = bkath.Book_BookID
+            // INNER JOIN author athrs ON bkath.Author_AuthorID = athrs.AuthorID
+            // WHERE last_name = ? AND first_name = ? AND subject = ?"
+            books = query.executeQuery("SELECT BookID, Title, ISBN, Edition_Number, Subject, First_Name, Last_Name FROM book bks INNER JOIN book_loan bkln ON bks.BookID = bkln.Book_BookID INNER JOIN borrower brwr ON bkln.Borrower_Borrower_ID = brwr.Borrower_ID WHERE Available = 0 ORDER BY Last_Name");
 
             DefaultTableModel theBooks = returnTableModelFromResultSet(books);
 

@@ -60,7 +60,7 @@ public class LibrarySystemController
     }
 
     private void loadLoans(){
-        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Available"};
+        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "First", "Last"};
         DefaultTableModel loans = theModel.getAllLoanedBooks();
         loans.setColumnIdentifiers(loanColNames);
         theView.loansTable.setModel(loans);
@@ -111,7 +111,7 @@ public class LibrarySystemController
                     theView.searchTable.setModel(theModel.getBooksbyAuthor(theView.authorComboBox.getSelectedItem().toString()));
                 else if(theView.authorComboBox.getSelectedItem().toString().equals("Choose an Author"))
                     theView.searchTable.setModel(theModel.getBooksbySubject(theView.subjectComboBox.getSelectedItem().toString()));
-                else
+                else if(!theView.authorComboBox.getSelectedItem().toString().equals("Choose an Author") && !theView.subjectComboBox.getSelectedItem().toString().equals("Choose a Subject"))
                     theView.searchTable.setModel(theModel.getBooksByAuthorAndSubject(theView.authorComboBox.getSelectedItem().toString(), theView.subjectComboBox.getSelectedItem().toString()));
             }
         }
