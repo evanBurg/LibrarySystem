@@ -121,6 +121,7 @@ public class LibrarySystemView extends JFrame
 
     	usersTable = new JTable();
     	usersTable.setEnabled(false);
+        usersTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     	userTableScrollPane = new JScrollPane(usersTable);
     	usersPanel.add(userTableScrollPane, BorderLayout.CENTER);
     	
