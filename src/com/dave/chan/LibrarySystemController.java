@@ -13,6 +13,7 @@ package com.dave.chan;
  */
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -39,24 +40,30 @@ public class LibrarySystemController
 
     private void loadUsers(){
         // TableModel definition
-        String[] userColNames = {"Last Name", "First Name", "E-mail"};
+        String[] userColNames = {"ID", "First Name", "Last Name", "E-mail"};
         DefaultTableModel users = theModel.getAllBorrowers();
         users.setColumnIdentifiers(userColNames);
         theView.usersTable.setModel(users);
+        TableColumnModel tcm =  theView.usersTable.getColumnModel();
+        tcm.removeColumn( tcm.getColumn(0) );
     }
 
     private void loadBooks(){
         String[] bookColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Available"};
         DefaultTableModel books = theModel.getAllBooks();
         books.setColumnIdentifiers(bookColNames);
-        //theView.booksTable.setModel(books);
+        theView.retrievalTable.setModel(books);
+        TableColumnModel tcm =  theView.retrievalTable.getColumnModel();
+        tcm.removeColumn( tcm.getColumn(0) );
     }
 
     private void loadLoans(){
         String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Available"};
         DefaultTableModel loans = theModel.getAllLoanedBooks();
         loans.setColumnIdentifiers(loanColNames);
-        //theView.loansTable.setModel(books);
+        theView.loansTable.setModel(loans);
+        TableColumnModel tcm =  theView.loansTable.getColumnModel();
+        tcm.removeColumn( tcm.getColumn(0) );
     }
 
     public void updateUsers(){

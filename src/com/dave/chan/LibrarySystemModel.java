@@ -246,7 +246,7 @@ public class LibrarySystemModel
         try{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
-            borrowers = query.executeQuery("SELECT first_name, last_name, borrower_email FROM borrower");
+            borrowers = query.executeQuery("SELECT borrower_id, first_name, last_name, borrower_email FROM borrower ORDER BY last_name");
 
             DefaultTableModel theBorrowers = returnTableModelFromResultSet(borrowers);
 
@@ -278,10 +278,10 @@ public class LibrarySystemModel
             Vector<Vector> users = model.getDataVector();
 
             for(int i = 0; i < users.size(); i++){
-                query.setString(1, (String)users.get(i).get(0));
-                query.setString(2, (String)users.get(i).get(1));
-                query.setString(3, (String)users.get(i).get(2));
-                query.setInt(4, i+1);
+                query.setString(1, (String)users.get(i).get(1));
+                query.setString(2, (String)users.get(i).get(2));
+                query.setString(3, (String)users.get(i).get(3));
+                query.setInt(4, (int)users.get(i).get(0));
                 query.addBatch();
             }
 
