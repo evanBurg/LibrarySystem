@@ -245,7 +245,8 @@ public class LibrarySystemView extends JFrame
         libraryTabbedPane.addTab("Loans", loansPanel);
 
         //Retrieval Section
-        retrievalPanel = new JPanel();
+        retrievalPanel = new JPanel(new BorderLayout());
+        
 
         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
 
