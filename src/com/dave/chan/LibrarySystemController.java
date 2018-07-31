@@ -32,6 +32,9 @@ public class LibrarySystemController
         loadUsers();
         loadBooks();
         loadLoans();
+
+        ActionListener listener = new BookListener();
+        theView.addCalculateListener(listener);
     }//end constructor
 
     private void loadUsers(){
@@ -56,8 +59,12 @@ public class LibrarySystemController
         //theView.loansTable.setModel(books);
     }
 
-    public void updateBorrowers(){
+    public void updateUsers(){
         theModel.updateBorrowers((DefaultTableModel)theView.usersTable.getModel());
+    }
+
+    public void addNewUser(){
+        theModel.addNewBorrower();
     }
 
     //PUT INNER CLASS HERE
@@ -66,7 +73,18 @@ public class LibrarySystemController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-
+            if(e.getSource().equals(theView.usersSaveButton)){
+                updateUsers();
+                loadUsers();
+                theView.usersTable.setEnabled(false);
+            }
+            if(e.getSource().equals(theView.usersUpdateButton)){
+                theView.usersTable.setEnabled(true);
+            }
+            if(e.getSource().equals(theView.usersNewButton)){
+                addNewUser();
+                loadUsers();
+            }
         }
 
     }//end inner class
