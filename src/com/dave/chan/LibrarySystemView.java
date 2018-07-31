@@ -22,12 +22,15 @@ public class LibrarySystemView extends JFrame
 	JFrame libraryFrame;
 	
 	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, loansPanel, retrievalPanel, booksButtonPanel, 
-				bookFormPanel, booksTitlePanel, loansButtonPanel;
+				bookFormPanel, booksTitlePanel, loansButtonPanel, retrievalButtonPanel, searchPanel;
 	
-	JTable usersTable, booksListTable, loansTable;
-	JScrollPane userTableScrollPane, loansTableScrollPane;
+	JTable usersTable, loansTable, retrievalTable;
+	
+	JScrollPane userTableScrollPane, loansTableScrollPane, retrievalTableScrollPane;
+	
 	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton, 
-			loansCheckOutBtn, loansCheckInBtn, addUserDialogButton;
+			loansCheckOutBtn, loansCheckInBtn, addUserDialogButton, retrievalOverdueButton, retrievalUsersBorrowButton, 
+			retrievalBooksOnLoanButton, retrievalBooksButton;
 	
 	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel;
 	
@@ -107,7 +110,7 @@ public class LibrarySystemView extends JFrame
         super("Library System");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-        this.setSize(500,550);
+        this.setSize(600,550);
         this.setLocationRelativeTo(null);
 
         basePanel = new JPanel(new FlowLayout());
@@ -125,7 +128,7 @@ public class LibrarySystemView extends JFrame
     	userTableScrollPane = new JScrollPane(usersTable);
     	usersPanel.add(userTableScrollPane, BorderLayout.CENTER);
     	
-    	usersButtonPanel = new JPanel(new GridLayout(1,3));
+    	usersButtonPanel = new JPanel(new GridLayout(1, 3, 3, 3));
     	
     	usersSaveButton = new JButton("Save");
     	usersUpdateButton = new JButton("Update User Info");
@@ -241,14 +244,41 @@ public class LibrarySystemView extends JFrame
         
         loansPanel.add(loansButtonPanel, BorderLayout.SOUTH);
         
-        //booksListTable = new JTable();
-
         libraryTabbedPane.addTab("Loans", loansPanel);
 
         //Retrieval Section
-        retrievalPanel = new JPanel();
+        retrievalPanel = new JPanel(new BorderLayout());
+        retrievalButtonPanel = new JPanel(new GridLayout(1, 4, 3, 3));
+        
+        retrievalBooksButton = new JButton("Book Index");
+        retrievalBooksOnLoanButton = new JButton("Checked Out");
+        retrievalUsersBorrowButton = new JButton("Borrowing Books");
+        retrievalOverdueButton = new JButton("Overdue Index");
+        
+        retrievalButtonPanel.add(retrievalBooksButton);
+        retrievalButtonPanel.add(retrievalBooksOnLoanButton);
+        retrievalButtonPanel.add(retrievalUsersBorrowButton);
+        retrievalButtonPanel.add(retrievalOverdueButton);
+        
+        retrievalPanel.add(retrievalButtonPanel, BorderLayout.SOUTH);
+        
+        retrievalTable = new JTable();
+        retrievalTable.setEnabled(false);
+        retrievalTableScrollPane = new JScrollPane(retrievalTable);
+        
+        retrievalPanel.add(retrievalTableScrollPane, BorderLayout.CENTER);
+        
+        
 
         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
+        
+        //Search Section
+        searchPanel = new JPanel();
+        
+        
+
+        libraryTabbedPane.addTab("Search", searchPanel);
+        
 
         //display it
         this.setVisible(true);
