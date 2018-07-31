@@ -34,7 +34,7 @@ public class LibrarySystemController
         loadLoans();
 
         ActionListener listener = new BookListener();
-        theView.addCalculateListener(listener);
+        theView.addListener(listener);
     }//end constructor
 
     private void loadUsers(){
