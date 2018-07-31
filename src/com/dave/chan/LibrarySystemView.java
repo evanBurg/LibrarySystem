@@ -24,7 +24,7 @@ public class LibrarySystemView extends JFrame
 	
 	JFrame libraryFrame;
 	
-	JComboBox searchComboBox;
+	JComboBox authorComboBox, subjectComboBox;
 	
 	ButtonGroup searchGroup;
 	
@@ -291,21 +291,28 @@ public class LibrarySystemView extends JFrame
         
         
         
-        searchGroup = new ButtonGroup();
-        searchGroup.add(subjectRadioButton);
-        searchGroup.add(authorRadioButton);
+        //searchGroup = new ButtonGroup();
+        //searchGroup.add(subjectRadioButton);
+        //searchGroup.add(authorRadioButton);
         
         searchUIPanel.add(searchInfoLabel);
-        searchUIPanel.add(authorRadioButton);
-        searchUIPanel.add(subjectRadioButton);
-            
-        searchComboBox = new JComboBox();
+        //searchUIPanel.add(authorRadioButton);
+        //searchUIPanel.add(subjectRadioButton);
+
+        //authorComboBox, subjectComboBox
+        authorComboBox = new JComboBox();
+        subjectComboBox = new JComboBox();
         //unverified if it works yet but hoping it does
         BoundsPopupMenuListener listener = new BoundsPopupMenuListener(true, false);
-        searchComboBox.addPopupMenuListener( listener );
-        searchComboBox.setPrototypeDisplayValue("Dickens, CharlesWWWWWW");
-        searchComboBox.setEditable(false);
-        searchUIPanel.add(searchComboBox);
+        authorComboBox.addPopupMenuListener( listener );
+        authorComboBox.setPrototypeDisplayValue("Dickens, CharlesWWWWWW");
+        authorComboBox.setEditable(false);
+        searchUIPanel.add(authorComboBox);
+
+        subjectComboBox.addPopupMenuListener( listener );
+        subjectComboBox.setPrototypeDisplayValue("Java");
+        subjectComboBox.setEditable(false);
+        searchUIPanel.add(subjectComboBox);
         
         searchPanel.add(searchUIPanel, BorderLayout.NORTH);
         
@@ -348,10 +355,10 @@ public class LibrarySystemView extends JFrame
         retrievalOverdueButton.addActionListener(generalListener);
         
         //Search Tab Button Listeners
-        subjectRadioButton.addActionListener(generalListener);
-        authorRadioButton.addActionListener(generalListener);
+        subjectComboBox.addActionListener(generalListener);
+        authorComboBox.addActionListener(generalListener);
+        //subjectRadioButton.addActionListener(generalListener);
+        //authorRadioButton.addActionListener(generalListener);
 	}
-	
-
 
 }//end class

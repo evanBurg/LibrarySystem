@@ -33,6 +33,8 @@ public class LibrarySystemController
         loadUsers();
         loadBooks();
         loadLoans();
+        loadAuthors();
+        loadSubject();
 
         ActionListener listener = new BookListener();
         theView.addListener(listener);
@@ -66,6 +68,14 @@ public class LibrarySystemController
         tcm.removeColumn( tcm.getColumn(0) );
     }
 
+    public void loadSubject(){
+        theView.subjectComboBox.setModel(theModel.getAllSubjects());
+    }
+
+    public void loadAuthors(){
+        theView.authorComboBox.setModel(theModel.getAllAuthors());
+    }
+
     public void updateUsers(){
         theModel.updateBorrowers((DefaultTableModel)theView.usersTable.getModel());
     }
@@ -95,6 +105,14 @@ public class LibrarySystemController
                 theView.addUserDialog.setVisible(false);
                 addNewUser(theView.addUserDialog.addUserFirstName.getText(), theView.addUserDialog.addUserLastName.getText(), theView.addUserDialog.addUserEmail.getText());
                 loadUsers();
+            }
+            if(e.getSource().equals(theView.authorComboBox) || e.getSource().equals(theView.subjectComboBox)){
+                if(theView.subjectComboBox.getSelectedItem().toString().equals("Choose a Subject"))
+                    theView.searchTable.setModel(theModel.getBooksbyAuthor(theView.authorComboBox.getSelectedItem().toString()));
+                else if(theView.authorComboBox.getSelectedItem().toString().equals("Choose an Author"))
+                    theView.searchTable.setModel(theModel.getBooksbySubject(theView.subjectComboBox.getSelectedItem().toString()));
+                else
+                    theView.searchTable.setModel(theModel.getBooksByAuthorAndSubject(theView.authorComboBox.getSelectedItem().toString(), theView.subjectComboBox.getSelectedItem().toString()));
             }
         }
 
