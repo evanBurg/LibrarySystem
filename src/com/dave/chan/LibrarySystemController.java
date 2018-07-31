@@ -38,7 +38,7 @@ public class LibrarySystemController
         theView.addListener(listener);
     }//end constructor
 
-    private void loadUsers(){
+    private void loadUsers() {
         // TableModel definition
         String[] userColNames = {"ID", "First Name", "Last Name", "E-mail"};
         DefaultTableModel users = theModel.getAllBorrowers();

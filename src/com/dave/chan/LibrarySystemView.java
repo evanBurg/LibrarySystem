@@ -10,9 +10,12 @@ package com.dave.chan;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 
 public class LibrarySystemView extends JFrame
 {
@@ -21,25 +24,32 @@ public class LibrarySystemView extends JFrame
 	
 	JFrame libraryFrame;
 	
+	JComboBox searchComboBox;
+	
+	ButtonGroup searchGroup;
+	
 	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, loansPanel, retrievalPanel, booksButtonPanel, 
-				bookFormPanel, booksTitlePanel, loansButtonPanel, retrievalButtonPanel, searchPanel;
+				bookFormPanel, booksTitlePanel, loansButtonPanel, retrievalButtonPanel, searchPanel, searchUIPanel;
 	
-	JTable usersTable, loansTable, retrievalTable;
+	JTable usersTable, loansTable, retrievalTable, searchTable;
 	
-	JScrollPane userTableScrollPane, loansTableScrollPane, retrievalTableScrollPane;
+	JRadioButton subjectRadioButton, authorRadioButton;
+	
+	JScrollPane userTableScrollPane, loansTableScrollPane, retrievalTableScrollPane, searchTableScrollPane;
 	
 	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton, 
 			loansCheckOutBtn, loansCheckInBtn, addUserDialogButton, retrievalOverdueButton, retrievalUsersBorrowButton, 
 			retrievalBooksOnLoanButton, retrievalBooksButton;
 	
-	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel;
+	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel,
+				searchInfoLabel;
 	
 	JTextArea bookTitleTextArea, bookEditionTextArea, bookSubjectTextArea, bookAuthorFNTextArea;
 	
 	AddUserDialog addUserDialog;
 	
 	NewLoanDialog newLoanDialog;
-
+	
 	public class NewLoanDialog extends JFrame{
 	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
         JTextArea addUserFirstName, addUserLastName, addUserEmail;
@@ -271,7 +281,39 @@ public class LibrarySystemView extends JFrame
         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
         
         //Search Section
-        searchPanel = new JPanel();
+        searchPanel = new JPanel(new BorderLayout());
+        
+        searchUIPanel = new JPanel();
+        
+        searchInfoLabel = new JLabel("Search By:");
+        authorRadioButton = new JRadioButton("Author");
+        subjectRadioButton = new JRadioButton("Subject");
+        
+        
+        
+        searchGroup = new ButtonGroup();
+        searchGroup.add(subjectRadioButton);
+        searchGroup.add(authorRadioButton);
+        
+        searchUIPanel.add(searchInfoLabel);
+        searchUIPanel.add(authorRadioButton);
+        searchUIPanel.add(subjectRadioButton);
+            
+        searchComboBox = new JComboBox();
+        //unverified if it works yet but hoping it does
+        BoundsPopupMenuListener listener = new BoundsPopupMenuListener(true, false);
+        searchComboBox.addPopupMenuListener( listener );
+        searchComboBox.setPrototypeDisplayValue("Dickens, CharlesWWWWWW");
+        searchComboBox.setEditable(false);
+        searchUIPanel.add(searchComboBox);
+        
+        searchPanel.add(searchUIPanel, BorderLayout.NORTH);
+        
+        searchTable = new JTable();
+        searchTable.setEnabled(false);
+        searchTableScrollPane = new JScrollPane(searchTable);
+        
+        searchPanel.add(searchTableScrollPane, BorderLayout.CENTER);    
         
         libraryTabbedPane.addTab("Search", searchPanel);
         
@@ -306,6 +348,10 @@ public class LibrarySystemView extends JFrame
         retrievalOverdueButton.addActionListener(generalListener);
         
         //Search Tab Button Listeners
+        subjectRadioButton.addActionListener(generalListener);
+        authorRadioButton.addActionListener(generalListener);
 	}
+	
+
 
 }//end class
