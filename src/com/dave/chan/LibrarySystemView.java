@@ -89,6 +89,7 @@ public class LibrarySystemView extends JFrame
         booksPanel.add(booksButtonPanel, BorderLayout.SOUTH);
         
         //New Book Information
+        //BoxLayout this bitch potentially
         SpringLayout sprlayout = new SpringLayout();
         bookFormPanel = new JPanel(sprlayout);
                 
@@ -102,7 +103,30 @@ public class LibrarySystemView extends JFrame
         bookSubjectTextArea = new JTextArea();
         
         bookAuthorFNLabel = new JLabel("Author Full Name:");
-        bookAuthorFNTextArea = new JTextArea();
+        bookAuthorFNTextArea = new JTextArea("Dickens, Charles");
+        bookAuthorFNTextArea.setForeground(Color.GRAY);
+    	Font italicFont = new Font("Sans-Serif",Font.ITALIC, 12);
+    	Font stdFont = new Font("Sans-Serif", Font.PLAIN, 12);
+    	bookAuthorFNTextArea.setFont(italicFont);
+        bookAuthorFNTextArea.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (bookAuthorFNTextArea.getText().equals("Dickens, Charles")) {
+                	bookAuthorFNTextArea.setText("");
+                	bookAuthorFNTextArea.setFont(stdFont);
+                	bookAuthorFNTextArea.setForeground(Color.BLACK);
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (bookAuthorFNTextArea.getText().isEmpty()) {
+                	bookAuthorFNTextArea.setForeground(Color.GRAY);
+                	bookAuthorFNTextArea.setFont(italicFont);
+                	bookAuthorFNTextArea.setText("Dickens, Charles");
+                }
+            }
+            });
+
         
                
         bookFormPanel.add(bookTitleLabel);
@@ -123,9 +147,6 @@ public class LibrarySystemView extends JFrame
         
         //authors added api
         booksCurrentAuthorsLabel = new JLabel("Number of Authors Added: ");
-
-        
-        
         
         libraryTabbedPane.addTab("Books", booksPanel);
 
@@ -152,6 +173,8 @@ public class LibrarySystemView extends JFrame
 		usersSaveButton.addActionListener(generalListener);
 		usersUpdateButton.addActionListener(generalListener);
 		usersNewButton.addActionListener(generalListener);
+		
+		booksAddBookButton.addActionListener(generalListener);
 		
 	}
 
