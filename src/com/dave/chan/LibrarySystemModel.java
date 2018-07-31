@@ -207,7 +207,8 @@ public class LibrarySystemModel
 
         try{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
-            query = connection.prepareStatement("UPDATE borrowers SET first_name = ?, last_name = ?, borrower_email = ?");
+
+            query = connection.prepareStatement("UPDATE borrower SET first_name = ?, last_name = ?, borrower_email = ? WHERE borrower_id = ?");
 
 
             Vector<Vector> users = model.getDataVector();
@@ -216,10 +217,35 @@ public class LibrarySystemModel
                 query.setString(1, (String)users.get(i).get(0));
                 query.setString(2, (String)users.get(i).get(1));
                 query.setString(3, (String)users.get(i).get(2));
+                query.setInt(4, i+1);
                 query.addBatch();
             }
 
             query.executeBatch();
+
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+
+            return true;
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addNewBorrower(){
+        Connection connection = null;
+        Statement query = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+
+            query = connection.createStatement();
+
+            query.executeUpdate("INSERT INTO borrower (first_name, last_name, borrower_email) VALUES('New', 'User', 'nuser@gmail.ca')");
 
             if(query != null)
                 query.close();
