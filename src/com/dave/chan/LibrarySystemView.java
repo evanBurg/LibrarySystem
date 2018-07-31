@@ -35,12 +35,12 @@ public class LibrarySystemView extends JFrame
             super("Library System");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new FlowLayout() );//ANONYMOUS layout object
-            this.setSize(500,100);
+            this.setSize(500,200);
             this.setLocationRelativeTo(null);
 
-            addUserFirstNameLabel = new JLabel("First Name");
-            addUserLastNameLabel = new JLabel("Last Name");
-            addUserEmailLabel = new JLabel("Email");
+            addUserFirstNameLabel = new JLabel("First Name:");
+            addUserLastNameLabel = new JLabel("Last Name:");
+            addUserEmailLabel = new JLabel("Email:");
 
             addUserFirstName = new JTextArea(1, 7);
             addUserLastName = new JTextArea(1, 7);
