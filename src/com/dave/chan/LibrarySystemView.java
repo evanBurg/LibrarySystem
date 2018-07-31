@@ -19,10 +19,11 @@ public class LibrarySystemView extends JFrame
 	//class-wide
 	JTabbedPane libraryTabbedPane;
 	JFrame libraryFrame;
-	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, loansPanel, retrievalPanel, booksButtonPanel, bookFormPanel, booksTitlePanel;
-	JTable usersTable, booksListTable;
-	JScrollPane userTableScrollPane;
-	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton;
+	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, loansPanel, retrievalPanel, booksButtonPanel, 
+				bookFormPanel, booksTitlePanel, loansButtonPanel;
+	JTable usersTable, booksListTable, loansTable;
+	JScrollPane userTableScrollPane, loansTableScrollPane;
+	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton, loansCheckOutBtn, loansCheckInBtn;
 	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel;
 	JTextArea bookTitleTextArea, bookEditionTextArea, bookSubjectTextArea, bookAuthorFNTextArea;
 
@@ -151,10 +152,25 @@ public class LibrarySystemView extends JFrame
         libraryTabbedPane.addTab("Books", booksPanel);
 
         //Loans Section
-        loansPanel = new JPanel();
-        booksListTable = new JTable();
+        loansPanel = new JPanel(new BorderLayout());
+        loansTable = new JTable();
+        loansTable.setEnabled(false);
+        loansTableScrollPane = new JScrollPane(loansTable);
+        loansPanel.add(loansTableScrollPane, BorderLayout.CENTER);
+        
+        loansButtonPanel = new JPanel();
+        loansCheckOutBtn = new JButton("Check Out Book");
+        loansCheckInBtn = new JButton("Check In Book");
+        loansButtonPanel.add(loansCheckOutBtn);
+        loansButtonPanel.add(loansCheckInBtn);
+        
+        loansPanel.add(loansButtonPanel, BorderLayout.SOUTH);
+        
+
+        //booksListTable = new JTable();
 
         libraryTabbedPane.addTab("Loans", loansPanel);
+
 
         //Retrieval Section
         retrievalPanel = new JPanel();
