@@ -63,8 +63,8 @@ public class LibrarySystemController
         theModel.updateBorrowers((DefaultTableModel)theView.usersTable.getModel());
     }
 
-    public void addNewUser(){
-        theModel.addNewBorrower();
+    public void addNewUser(String first, String last, String email){
+        theModel.addNewBorrower(first, last, email);
     }
 
     //PUT INNER CLASS HERE
