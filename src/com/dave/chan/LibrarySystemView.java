@@ -26,6 +26,34 @@ public class LibrarySystemView extends JFrame
 	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton, loansCheckOutBtn, loansCheckInBtn;
 	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel;
 	JTextArea bookTitleTextArea, bookEditionTextArea, bookSubjectTextArea, bookAuthorFNTextArea;
+	AddUserDialog addUserDialog;
+
+	public class AddUserDialog extends JFrame{
+	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
+        JTextArea addUserFirstName, addUserLastName, addUserEmail;
+        public AddUserDialog(){
+            super("Library System");
+            this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            this.setLayout(new FlowLayout() );//ANONYMOUS layout object
+            this.setSize(500,100);
+            this.setLocationRelativeTo(null);
+
+            addUserFirstNameLabel = new JLabel("First Name");
+            addUserLastNameLabel = new JLabel("Last Name");
+            addUserEmailLabel = new JLabel("Email");
+
+            addUserFirstName = new JTextArea(1, 7);
+            addUserLastName = new JTextArea(1, 7);
+            addUserEmail = new JTextArea(1, 7);
+
+            this.add(addUserFirstNameLabel);
+            this.add(addUserFirstName);
+            this.add(addUserLastNameLabel);
+            this.add(addUserLastName);
+            this.add(addUserEmailLabel);
+            this.add(addUserEmail);
+        }
+    }
 
     public LibrarySystemView()
     {
@@ -177,11 +205,13 @@ public class LibrarySystemView extends JFrame
 
         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
 
+        addUserDialog = new AddUserDialog();
+
         //display it
         this.setVisible(true);
 
     }//end constructor
-    
+
     //When we have a button clicked we fire off a listener to all buttons and in our controller we will
     //parse through and delegate the events properly.
 	public void addListener(ActionListener generalListener )
