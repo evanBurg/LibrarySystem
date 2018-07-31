@@ -236,7 +236,7 @@ public class LibrarySystemModel
         }
     }
 
-    public boolean addNewBorrower(){
+    public boolean addNewBorrower(String first, String last, String email){
         Connection connection = null;
         Statement query = null;
 
@@ -245,7 +245,7 @@ public class LibrarySystemModel
 
             query = connection.createStatement();
 
-            query.executeUpdate("INSERT INTO borrower (first_name, last_name, borrower_email) VALUES('New', 'User', 'nuser@gmail.ca')");
+            query.executeUpdate("INSERT INTO borrower (first_name, last_name, borrower_email) VALUES('"+ first +"', '"+ last +"', '"+ email +"')");
 
             if(query != null)
                 query.close();

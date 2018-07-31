@@ -63,8 +63,8 @@ public class LibrarySystemController
         theModel.updateBorrowers((DefaultTableModel)theView.usersTable.getModel());
     }
 
-    public void addNewUser(){
-        theModel.addNewBorrower();
+    public void addNewUser(String first, String last, String email){
+        theModel.addNewBorrower(first, last, email);
     }
 
     //PUT INNER CLASS HERE
@@ -83,6 +83,11 @@ public class LibrarySystemController
             }
             if(e.getSource().equals(theView.usersNewButton)){
                 theView.addUserDialog.setVisible(true);
+            }
+            if(e.getSource().equals(theView.addUserDialogButton)){
+                theView.addUserDialog.setVisible(false);
+                addNewUser(theView.addUserDialog.addUserFirstName.getText(), theView.addUserDialog.addUserLastName.getText(), theView.addUserDialog.addUserEmail.getText());
+                loadUsers();
             }
         }
 
