@@ -126,6 +126,7 @@ public class LibrarySystemModel
             books = query.executeQuery("SELECT subject FROM book");
 
             ArrayList<String> theBooks = new ArrayList<String>();
+            theBooks.add("Choose a Subject");
 
             while(books.next()){
                 theBooks.add(books.getString("subject"));
@@ -158,6 +159,8 @@ public class LibrarySystemModel
             authors = query.executeQuery("SELECT first_name, last_name FROM author");
 
             ArrayList<String> theAuthors = new ArrayList<String>();
+            theAuthors.add("Choose an Author");
+
 
             while(authors.next()){
                 theAuthors.add(authors.getString("last_name") + ", " + authors.getString("first_name"));
