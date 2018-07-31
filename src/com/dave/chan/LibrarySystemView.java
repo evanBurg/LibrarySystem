@@ -241,7 +241,7 @@ public class LibrarySystemView extends JFrame
         loansCheckInBtn = new JButton("Check In Book");
         loansButtonPanel.add(loansCheckOutBtn);
         loansButtonPanel.add(loansCheckInBtn);
-        
+
         loansPanel.add(loansButtonPanel, BorderLayout.SOUTH);
         
         libraryTabbedPane.addTab("Loans", loansPanel);
@@ -266,20 +266,15 @@ public class LibrarySystemView extends JFrame
         retrievalTable.setEnabled(false);
         retrievalTableScrollPane = new JScrollPane(retrievalTable);
         
-        retrievalPanel.add(retrievalTableScrollPane, BorderLayout.CENTER);
-        
-        
+        retrievalPanel.add(retrievalTableScrollPane, BorderLayout.CENTER);    
 
         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
         
         //Search Section
         searchPanel = new JPanel();
         
-        
-
         libraryTabbedPane.addTab("Search", searchPanel);
         
-
         //display it
         this.setVisible(true);
 
@@ -289,12 +284,28 @@ public class LibrarySystemView extends JFrame
     //parse through and delegate the events properly.
 	public void addListener(ActionListener generalListener )
 	{
+		//User Tab Button Listeners
 		usersSaveButton.addActionListener(generalListener);
 		usersUpdateButton.addActionListener(generalListener);
 		usersNewButton.addActionListener(generalListener);
 		addUserDialogButton.addActionListener(generalListener);
 		booksAddBookButton.addActionListener(generalListener);
 		
+		//Books Tab Button Listeners
+		booksAddBookButton.addActionListener(generalListener);
+		
+		//Loans Tab Button Listeners
+		//Will have a dialogue loan button listener to put here eventually, I reckon
+        loansCheckInBtn.addActionListener(generalListener);
+        loansCheckOutBtn.addActionListener(generalListener);
+        
+        //Retrieval Tab Button Listeners
+        retrievalBooksButton.addActionListener(generalListener);
+        retrievalBooksOnLoanButton.addActionListener(generalListener);
+        retrievalUsersBorrowButton.addActionListener(generalListener);
+        retrievalOverdueButton.addActionListener(generalListener);
+        
+        //Search Tab Button Listeners
 	}
 
 }//end class
