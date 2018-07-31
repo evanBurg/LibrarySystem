@@ -124,7 +124,7 @@ public class LibrarySystemModel
         try{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
-            books = query.executeQuery("SELECT subject FROM book");
+            books = query.executeQuery("SELECT DISTINCT subject FROM book");
 
             DefaultComboBoxModel theBooks = new DefaultComboBoxModel();
             theBooks.addElement("Choose a Subject");
@@ -211,18 +211,54 @@ public class LibrarySystemModel
         }
     }
 
-    public DefaultTableModel getBooksbyAuthor(String last_name){
+    public DefaultTableModel getBooksByAuthorAndSubject(String author, String subject){
         Connection connection = null;
-        Statement query = null;
+        PreparedStatement query = null;
         ResultSet books = null;
 
         try{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
-            query = connection.createStatement();
-            books = query.executeQuery(
-                    "SELECT * FROM info5051_books.book\n" +
-                    "INNER JOIN info5051_books.author\n" +
-                    "WHERE last_name = '" + last_name + "'");
+            query = connection.prepareStatement("SELECT BookID, Title, ISBN, Edition_Number, Subject, Available FROM book bks INNER JOIN book_author bkath ON bks.BookID = bkath.Book_BookID INNER JOIN author athrs ON bkath.Author_AuthorID = athrs.AuthorID WHERE last_name = ? AND first_name = ? AND subject = ?");
+            String[] name = author.trim().split("\\s*,\\s*");
+            String first = name[1];
+            String last = name[0];
+            query.setString(1, last);
+            query.setString(2, first);
+            query.setString(3, subject);
+            books = query.executeQuery();
+
+            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+
+            if(books != null)
+                books.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+
+            return theBooks;
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+
+            return null;
+        }
+    }
+
+    public DefaultTableModel getBooksbyAuthor(String author){
+        Connection connection = null;
+        PreparedStatement query = null;
+        ResultSet books = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            query = connection.prepareStatement("SELECT BookID, Title, ISBN, Edition_Number, Subject, Available FROM book bks INNER JOIN book_author bkath ON bks.BookID = bkath.Book_BookID INNER JOIN author athrs ON bkath.Author_AuthorID = athrs.AuthorID WHERE last_name = ? AND first_name = ?");
+            String[] name = author.trim().split("\\s*,\\s*");
+            String first = name[1];
+            String last = name[0];
+            query.setString(1, last);
+            query.setString(2, first);
+            books = query.executeQuery();
 
             DefaultTableModel theBooks = returnTableModelFromResultSet(books);
 

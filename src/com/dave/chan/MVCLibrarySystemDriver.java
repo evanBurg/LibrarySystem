@@ -1,5 +1,7 @@
 package com.dave.chan;
 
+import javax.swing.*;
+
 /**
  * Program Name: MVCLibrarySystemDriver.java
  * Purpose: this is the driver class that gets everything up and running.
@@ -12,9 +14,24 @@ package com.dave.chan;
 public class MVCLibrarySystemDriver
 {
 
+    private static void setLookAndFeel() {
+
+        try	{
+
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
+    }
+
     public static void main(String[] args)
     {
         // First, create objects of the view class and the model class
+        setLookAndFeel();
         LibrarySystemView theView = new LibrarySystemView();
         LibrarySystemModel theModel = new LibrarySystemModel();
 
