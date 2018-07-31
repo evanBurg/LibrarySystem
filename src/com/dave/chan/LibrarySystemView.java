@@ -9,6 +9,8 @@ package com.dave.chan;
  */
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -17,12 +19,12 @@ public class LibrarySystemView extends JFrame
 	//class-wide
 	JTabbedPane libraryTabbedPane;
 	JFrame libraryFrame;
-	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, loansPanel, retrievalPanel, booksButtonPanel, bookFormPanel;
+	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, loansPanel, retrievalPanel, booksButtonPanel, bookFormPanel, booksTitlePanel;
 	JTable usersTable, booksListTable;
 	JScrollPane userTableScrollPane;
 	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton;
-	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, bookAuthorLNLabel;
-	JTextField bookTitleTextField, bookEditionTextField, bookSubjectTextField, bookAuthorFNTextField, bookAuthorLNTextField;
+	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel;
+	JTextArea bookTitleTextArea, bookEditionTextArea, bookSubjectTextArea, bookAuthorFNTextArea;
 
     public LibrarySystemView()
     {
@@ -30,7 +32,7 @@ public class LibrarySystemView extends JFrame
         super("Library System");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-        this.setSize(500,500);
+        this.setSize(500,550);
         this.setLocationRelativeTo(null);
 
         basePanel = new JPanel(new FlowLayout());
@@ -65,7 +67,22 @@ public class LibrarySystemView extends JFrame
         //Books Section
         booksPanel = new JPanel(new BorderLayout());
         
+        booksTitlePanel = new JPanel();
+        
+        booksTitleLabel = new JLabel("Add a New Book");
+        
+        booksTitlePanel.add(booksTitleLabel);
+        
+        booksPanel.add(booksTitlePanel, BorderLayout.NORTH);
+        
+        
         booksButtonPanel = new JPanel();
+        BoxLayout booksBoxLayout = new BoxLayout(booksButtonPanel, BoxLayout.Y_AXIS);
+        booksButtonPanel.setLayout(booksBoxLayout);
+        booksButtonPanel.setBorder(new EmptyBorder(new Insets(20, 150, 20, 15)));
+        
+        booksCurrentAuthorsLabel = new JLabel("Number of Authors Added:");
+        booksButtonPanel.add(booksCurrentAuthorsLabel);
         booksAddBookButton = new JButton("Add Book to Archive");
         booksButtonPanel.add(booksAddBookButton);
         
@@ -74,40 +91,42 @@ public class LibrarySystemView extends JFrame
         //New Book Information
         SpringLayout sprlayout = new SpringLayout();
         bookFormPanel = new JPanel(sprlayout);
-        
-        SpringUtilities.makeGrid(bookFormPanel,
-                2, 4, //rows, cols
-                5, 5, //initialX, initialY
-                5, 5);//xPad, yPad
-        
+                
         bookTitleLabel = new JLabel("Title:");
-        bookTitleTextField = new JTextField();
+        bookTitleTextArea = new JTextArea();
         
         bookEditionLabel = new JLabel("Edition:");
-        bookEditionTextField = new JTextField();
+        bookEditionTextArea = new JTextArea();
         
         bookSubjectLabel = new JLabel("Subject:");
-        bookSubjectTextField = new JTextField();
+        bookSubjectTextArea = new JTextArea();
         
-        bookAuthorFNLabel = new JLabel("Author First Name:");
-        bookAuthorFNTextField = new JTextField();
+        bookAuthorFNLabel = new JLabel("Author Full Name:");
+        bookAuthorFNTextArea = new JTextArea();
         
-        bookAuthorLNLabel = new JLabel("Author Last Name:");
-        bookAuthorLNTextField = new JTextField();
-        
+               
         bookFormPanel.add(bookTitleLabel);
-        bookFormPanel.add(bookTitleTextField);
+        bookFormPanel.add(bookTitleTextArea);
         bookFormPanel.add(bookEditionLabel);
-        bookFormPanel.add(bookEditionTextField);
+        bookFormPanel.add(bookEditionTextArea);
         bookFormPanel.add(bookSubjectLabel);
-        bookFormPanel.add(bookSubjectTextField);
+        bookFormPanel.add(bookSubjectTextArea);
         bookFormPanel.add(bookAuthorFNLabel);
-        bookFormPanel.add(bookAuthorFNTextField);
-        bookFormPanel.add(bookAuthorLNLabel);
-        bookFormPanel.add(bookAuthorLNTextField);
+        bookFormPanel.add(bookAuthorFNTextArea);
+        
+        SpringUtilities.makeGrid(bookFormPanel,
+                4, 2, //rows, cols
+                25, 25, //initialX, initialY
+                25, 25);//xPad, yPad
         
         booksPanel.add(bookFormPanel, BorderLayout.CENTER);
+        
+        //authors added api
+        booksCurrentAuthorsLabel = new JLabel("Number of Authors Added: ");
 
+        
+        
+        
         libraryTabbedPane.addTab("Books", booksPanel);
 
         //Loans Section
@@ -128,7 +147,7 @@ public class LibrarySystemView extends JFrame
     
     //When we have a button clicked we fire off a listener to all buttons and in our controller we will
     //parse through and delegate the events properly.
-	public void addCalculateListener(ActionListener generalListener )
+	public void addListener(ActionListener generalListener )
 	{
 		usersSaveButton.addActionListener(generalListener);
 		usersUpdateButton.addActionListener(generalListener);
