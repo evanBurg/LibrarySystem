@@ -115,6 +115,70 @@ public class LibrarySystemModel
         }
     }
 
+    public ArrayList<String> getAllSubjects(){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet books = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            query = connection.createStatement();
+            books = query.executeQuery("SELECT subject FROM book");
+
+            ArrayList<String> theBooks = new ArrayList<String>();
+
+            while(books.next()){
+                theBooks.add(books.getString("subject"));
+            }
+
+            if(books != null)
+                books.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+
+            return theBooks;
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+
+            return null;
+        }
+    }
+
+    public ArrayList<String> getAllAuthors(){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet authors = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            query = connection.createStatement();
+            authors = query.executeQuery("SELECT first_name, last_name FROM author");
+
+            ArrayList<String> theAuthors = new ArrayList<String>();
+
+            while(authors.next()){
+                theAuthors.add(authors.getString("last_name") + ", " + authors.getString("first_name"));
+            }
+
+            if(authors != null)
+                authors.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+
+            return theAuthors;
+        }catch (Exception ex){
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+
+            return null;
+        }
+    }
+
     public DefaultTableModel getBooksbySubject(String subject){
         Connection connection = null;
         Statement query = null;
