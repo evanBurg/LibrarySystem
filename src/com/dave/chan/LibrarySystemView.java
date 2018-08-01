@@ -29,18 +29,19 @@ public class LibrarySystemView extends JFrame
 	
 	ButtonGroup searchGroup;
 	
-	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, loansPanel, retrievalPanel, booksButtonPanel, 
-				bookFormPanel, booksTitlePanel, loansButtonPanel, retrievalButtonPanel, searchPanel, searchUIPanel, searchButtonPanel;
+	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, retrievalPanel, booksButtonPanel, 
+				bookFormPanel, booksTitlePanel, hubBtnPanel, retrievalBtnPanel, searchPanel, searchUIPanel, searchButtonPanel
+				, addBookPanel;
 	
-	JTable usersTable, loansTable, retrievalTable, searchTable;
+	JTable usersTable, retrievalTable, searchTable, loansTable;
 	
 	JRadioButton subjectRadioButton, authorRadioButton;
 	
-	JScrollPane userTableScrollPane, loansTableScrollPane, retrievalTableScrollPane, searchTableScrollPane;
+	JScrollPane userTableScrollPane, retrievalTableScrollPane, searchTableScrollPane;
 	
 	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton, 
-			loansCheckOutBtn, loansCheckInBtn, addUserDialogButton, retrievalOverdueButton, retrievalUsersBorrowButton, 
-			retrievalBooksOnLoanButton, retrievalBooksButton;
+			searchCheckOutBtn, searchCheckInBtn, addUserDialogButton, retrievalOverdueButton, retrievalUsersBorrowButton, 
+			retrievalBooksOnLoanButton, retrievalBooksButton, addBookBtn;
 	
 	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel,
 				searchInfoLabel;
@@ -50,6 +51,201 @@ public class LibrarySystemView extends JFrame
 	AddUserDialog addUserDialog;
 	
 	LoanDialog loanDialog;
+	
+    public LibrarySystemView()
+    {
+        //boilerplate
+        super("Library System");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       // this.setLayout(new BorderLayout() );//ANONYMOUS layout object
+        this.setSize(700,550);
+        this.setLocationRelativeTo(null);
+
+        basePanel = new JPanel(new BorderLayout());
+        this.add(basePanel);
+
+        libraryTabbedPane = new JTabbedPane();
+        basePanel.add(libraryTabbedPane);
+        
+        //method calls to load different view tabs in our system
+        loadUserView();
+        loadHubView();
+        loadSearchView();
+                      
+        //display it
+        this.setVisible(true);
+
+    }//end constructor
+    
+    private void loadHubView()
+    {
+    	 retrievalPanel = new JPanel(new BorderLayout());
+    	 
+         hubBtnPanel = new JPanel(new BorderLayout());
+         
+         retrievalBtnPanel = new JPanel(new GridLayout(1,4,3,3));
+         addBookPanel = new JPanel();
+         
+         retrievalBooksButton = new JButton("Book Index");
+         retrievalOverdueButton = new JButton("Overdue Index");
+         retrievalBooksOnLoanButton = new JButton("Checked Out");
+         retrievalUsersBorrowButton = new JButton("Borrowing Books");
+         
+         addBookBtn = new JButton("Add New Book");
+         addBookPanel = new JPanel();
+         
+         retrievalBtnPanel.add(retrievalBooksButton);
+         retrievalBtnPanel.add(retrievalOverdueButton);
+         retrievalBtnPanel.add(retrievalBooksOnLoanButton);
+         retrievalBtnPanel.add(retrievalUsersBorrowButton);
+       
+         addBookPanel.add(addBookBtn);
+         
+         hubBtnPanel.add(retrievalBtnPanel, BorderLayout.WEST);
+         hubBtnPanel.add(addBookPanel, BorderLayout.EAST);
+         
+         retrievalTable = new JTable();
+         retrievalTable.setEnabled(false);
+         retrievalTableScrollPane = new JScrollPane(retrievalTable);
+         
+         retrievalPanel.add(retrievalTableScrollPane, BorderLayout.CENTER); 
+         retrievalPanel.add(hubBtnPanel, BorderLayout.SOUTH);
+
+         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
+    }
+    
+    private void loadUserView()
+    {
+    	
+    	usersPanel = new JPanel(new BorderLayout());
+     	usersTable = new JTable();
+     	usersTable.setEnabled(false);
+        usersTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+     	userTableScrollPane = new JScrollPane(usersTable);
+     	usersPanel.add(userTableScrollPane, BorderLayout.CENTER);
+     	
+     	usersButtonPanel = new JPanel(new GridLayout(1, 3, 3, 3));
+     	
+     	usersSaveButton = new JButton("Save");
+     	usersUpdateButton = new JButton("Update User Info");
+     	usersNewButton = new JButton("Add New User");
+     	
+     	usersButtonPanel.add(usersNewButton);
+        addUserDialog = new AddUserDialog();
+     	usersButtonPanel.add(usersUpdateButton);
+     	usersButtonPanel.add(usersSaveButton);
+     	
+     	usersPanel.add(usersButtonPanel, BorderLayout.SOUTH);
+       
+        libraryTabbedPane.add("Users", usersPanel);
+    }
+    
+    private void loadSearchView()
+    {
+    	searchPanel = new JPanel(new BorderLayout());
+        searchButtonPanel = new JPanel(new GridLayout(1, 3, 3, 3));
+        searchUIPanel = new JPanel();
+        loanDialog = new LoanDialog();
+        
+        searchCheckOutBtn = new JButton("Check Out Book");
+        searchCheckInBtn = new JButton("Check In Book");
+        searchButtonPanel.add(searchCheckInBtn);
+        searchButtonPanel.add(searchCheckOutBtn);
+        searchPanel.add(searchButtonPanel, BorderLayout.SOUTH);
+
+        searchInfoLabel = new JLabel("Search By:");
+          
+        searchUIPanel.add(searchInfoLabel);
+
+        authorComboBox = new JComboBox();
+        subjectComboBox = new JComboBox();
+        
+        authorComboBox.setPrototypeDisplayValue("Choose an Author");
+        authorComboBox.setEditable(false);
+        searchUIPanel.add(authorComboBox);
+
+        subjectComboBox.setPrototypeDisplayValue("Choose a Subject");
+        subjectComboBox.setEditable(false);
+        searchUIPanel.add(subjectComboBox);
+        
+        searchPanel.add(searchUIPanel, BorderLayout.NORTH);
+        
+        searchTable = new JTable();
+        searchTable.setEnabled(false);
+        searchTableScrollPane = new JScrollPane(searchTable);
+        
+        searchPanel.add(searchTableScrollPane, BorderLayout.CENTER);    
+        
+        libraryTabbedPane.addTab("Search", searchPanel);
+    }
+    
+    //When we have a button clicked we fire off a listener to all buttons and in our controller we will
+    //parse through and delegate the events properly.
+	public void addListener(ActionListener generalListener )
+	{
+		//User Tab Button Listeners
+		usersSaveButton.addActionListener(generalListener);
+		usersUpdateButton.addActionListener(generalListener);
+		usersNewButton.addActionListener(generalListener);
+		addUserDialogButton.addActionListener(generalListener);
+		booksAddBookButton.addActionListener(generalListener);
+		
+		//Books Tab Button Listeners
+		booksAddBookButton.addActionListener(generalListener);
+		
+		//Loans Tab Button Listeners
+		//Will have a dialogue loan button listener to put here eventually, I reckon
+        searchCheckInBtn.addActionListener(generalListener);
+        searchCheckOutBtn.addActionListener(generalListener);
+        
+        //Retrieval Tab Button Listeners
+        retrievalBooksButton.addActionListener(generalListener);
+        retrievalBooksOnLoanButton.addActionListener(generalListener);
+        retrievalUsersBorrowButton.addActionListener(generalListener);
+        retrievalOverdueButton.addActionListener(generalListener);
+        
+        //Search Tab Button Listeners
+        subjectComboBox.addActionListener(generalListener);
+        authorComboBox.addActionListener(generalListener);
+        loanDialog.acceptButton.addActionListener(generalListener);
+	}
+	
+	public class AddUserDialog extends JFrame{
+	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
+        JTextField addUserFirstName, addUserLastName, addUserEmail;
+        JPanel inputPanel, buttonPanel;
+        public AddUserDialog(){
+            super("Library System");
+            this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            this.setLayout(new BorderLayout() );//ANONYMOUS layout object
+            this.setSize(300,200);
+            this.setLocationRelativeTo(null);
+
+            addUserFirstNameLabel = new JLabel("First Name:");
+            addUserLastNameLabel = new JLabel("Last Name:");
+            addUserEmailLabel = new JLabel("Email:");
+
+            addUserFirstName = new JTextField();
+            addUserLastName = new JTextField();
+            addUserEmail = new JTextField();
+
+            addUserDialogButton = new JButton("Add User");
+
+            inputPanel = new JPanel(new GridLayout(3, 2, 5, 35));
+            this.add(inputPanel, BorderLayout.CENTER);
+
+            inputPanel.add(addUserFirstNameLabel);
+            inputPanel.add(addUserFirstName);
+            inputPanel.add(addUserLastNameLabel);
+            inputPanel.add(addUserLastName);
+            inputPanel.add(addUserEmailLabel);
+            inputPanel.add(addUserEmail);
+            
+            buttonPanel = new JPanel();
+            buttonPanel.add(addUserDialogButton);
+            this.add(buttonPanel, BorderLayout.SOUTH);
+        }
+    }
 	
 	public class LoanDialog extends JFrame{
 	    JLabel bookLabel;
@@ -91,287 +287,5 @@ public class LibrarySystemView extends JFrame
             this.setVisible(true);
         }
     }
-	
-	public class AddUserDialog extends JFrame{
-	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
-        JTextField addUserFirstName, addUserLastName, addUserEmail;
-        JPanel inputPanel, buttonPanel;
-        public AddUserDialog(){
-            super("Library System");
-            this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-            this.setSize(300,200);
-            this.setLocationRelativeTo(null);
-
-            addUserFirstNameLabel = new JLabel("First Name:");
-            addUserLastNameLabel = new JLabel("Last Name:");
-            addUserEmailLabel = new JLabel("Email:");
-
-            addUserFirstName = new JTextField();
-            addUserLastName = new JTextField();
-            addUserEmail = new JTextField();
-
-            addUserDialogButton = new JButton("Add User");
-
-            inputPanel = new JPanel(new GridLayout(3, 2, 5, 35));
-            this.add(inputPanel, BorderLayout.CENTER);
-
-            inputPanel.add(addUserFirstNameLabel);
-            inputPanel.add(addUserFirstName);
-            inputPanel.add(addUserLastNameLabel);
-            inputPanel.add(addUserLastName);
-            inputPanel.add(addUserEmailLabel);
-            inputPanel.add(addUserEmail);
-            
-            buttonPanel = new JPanel();
-            buttonPanel.add(addUserDialogButton);
-            this.add(buttonPanel, BorderLayout.SOUTH);
-        }
-    }
-
-    public LibrarySystemView()
-    {
-        //boilerplate
-        super("Library System");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       // this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-        this.setSize(700,550);
-        this.setLocationRelativeTo(null);
-
-        basePanel = new JPanel(new BorderLayout());
-        this.add(basePanel);
-
-        libraryTabbedPane = new JTabbedPane();
-        basePanel.add(libraryTabbedPane);
-
-        //Users Section
-        usersPanel = new JPanel(new BorderLayout());
-    	usersTable = new JTable();
-    	usersTable.setEnabled(false);
-        usersTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-    	userTableScrollPane = new JScrollPane(usersTable);
-    	usersPanel.add(userTableScrollPane, BorderLayout.CENTER);
-    	
-    	usersButtonPanel = new JPanel(new GridLayout(1, 3, 3, 3));
-    	
-    	usersSaveButton = new JButton("Save");
-    	usersUpdateButton = new JButton("Update User Info");
-    	usersNewButton = new JButton("Add New User");
-    	
-    	usersButtonPanel.add(usersNewButton);
-        addUserDialog = new AddUserDialog();
-    	usersButtonPanel.add(usersUpdateButton);
-    	usersButtonPanel.add(usersSaveButton);
-    	
-    	usersPanel.add(usersButtonPanel, BorderLayout.SOUTH);
-      
-        libraryTabbedPane.add("Users", usersPanel);
-
-        //Books Section
-        booksPanel = new JPanel(new BorderLayout());
-        
-        booksTitlePanel = new JPanel();
-        
-        booksTitleLabel = new JLabel("Add a New Book");
-        
-        booksTitlePanel.add(booksTitleLabel);
-        
-        booksPanel.add(booksTitlePanel, BorderLayout.NORTH);
-
-        booksButtonPanel = new JPanel();
-        BoxLayout booksBoxLayout = new BoxLayout(booksButtonPanel, BoxLayout.Y_AXIS);
-        booksButtonPanel.setLayout(booksBoxLayout);
-        booksButtonPanel.setBorder(new EmptyBorder(new Insets(20, 150, 20, 15)));
-        
-        booksCurrentAuthorsLabel = new JLabel("Number of Authors Added:");
-        booksButtonPanel.add(booksCurrentAuthorsLabel);
-        booksAddBookButton = new JButton("Add Book to Archive");
-        booksButtonPanel.add(booksAddBookButton);
-        
-        booksPanel.add(booksButtonPanel, BorderLayout.SOUTH);
-        
-        //New Book Information
-        //BoxLayout this bitch potentially
-        SpringLayout sprlayout = new SpringLayout();
-        bookFormPanel = new JPanel(sprlayout);
-                
-        bookTitleLabel = new JLabel("Title:");
-        bookTitleTextArea = new JTextArea();
-        
-        bookEditionLabel = new JLabel("Edition:");
-        bookEditionTextArea = new JTextArea();
-        
-        bookSubjectLabel = new JLabel("Subject:");
-        bookSubjectTextArea = new JTextArea();
-        
-        bookAuthorFNLabel = new JLabel("Author Full Name:");
-        bookAuthorFNTextArea = new JTextArea("Dickens, Charles");
-        bookAuthorFNTextArea.setForeground(Color.GRAY);
-    	Font italicFont = new Font("Sans-Serif",Font.ITALIC, 12);
-    	Font stdFont = new Font("Sans-Serif", Font.PLAIN, 12);
-    	bookAuthorFNTextArea.setFont(italicFont);
-        bookAuthorFNTextArea.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (bookAuthorFNTextArea.getText().equals("Dickens, Charles")) {
-                	bookAuthorFNTextArea.setText("");
-                	bookAuthorFNTextArea.setFont(stdFont);
-                	bookAuthorFNTextArea.setForeground(Color.BLACK);
-                }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (bookAuthorFNTextArea.getText().isEmpty()) {
-                	bookAuthorFNTextArea.setForeground(Color.GRAY);
-                	bookAuthorFNTextArea.setFont(italicFont);
-                	bookAuthorFNTextArea.setText("Dickens, Charles");
-                }
-            }
-            });
-             
-        bookFormPanel.add(bookTitleLabel);
-        bookFormPanel.add(bookTitleTextArea);
-        bookFormPanel.add(bookEditionLabel);
-        bookFormPanel.add(bookEditionTextArea);
-        bookFormPanel.add(bookSubjectLabel);
-        bookFormPanel.add(bookSubjectTextArea);
-        bookFormPanel.add(bookAuthorFNLabel);
-        bookFormPanel.add(bookAuthorFNTextArea);
-        
-        SpringUtilities.makeCompactGrid(bookFormPanel,
-                4, 2, //rows, cols
-                25, 25, //initialX, initialY
-                25, 25);//xPad, yPad
-        
-        booksPanel.add(bookFormPanel, BorderLayout.CENTER);
-        
-        //authors added api
-        booksCurrentAuthorsLabel = new JLabel("Number of Authors Added: ");
-        
-        libraryTabbedPane.addTab("Books", booksPanel);
-
-        //Loans Section
-        loansPanel = new JPanel(new BorderLayout());
-        loansTable = new JTable();
-        loansTable.setEnabled(false);
-        loansTableScrollPane = new JScrollPane(loansTable);
-        loansPanel.add(loansTableScrollPane, BorderLayout.CENTER);
-        
-        loansButtonPanel = new JPanel();
-        loansCheckOutBtn = new JButton("Check Out Book");
-        loanDialog = new LoanDialog();
-        loansCheckInBtn = new JButton("Check In Book");
-        loansButtonPanel.add(loansCheckOutBtn);
-        loansButtonPanel.add(loansCheckInBtn);
-
-        loansPanel.add(loansButtonPanel, BorderLayout.SOUTH);
-        
-        libraryTabbedPane.addTab("Loans", loansPanel);
-
-        //Retrieval Section
-        retrievalPanel = new JPanel(new BorderLayout());
-        retrievalButtonPanel = new JPanel(new GridLayout(1, 4, 3, 3));
-        
-        retrievalBooksButton = new JButton("Book Index");
-        retrievalBooksOnLoanButton = new JButton("Checked Out");
-        retrievalUsersBorrowButton = new JButton("Borrowing Books");
-        retrievalOverdueButton = new JButton("Overdue Index");
-        
-        retrievalButtonPanel.add(retrievalBooksButton);
-        retrievalButtonPanel.add(retrievalBooksOnLoanButton);
-        retrievalButtonPanel.add(retrievalUsersBorrowButton);
-        retrievalButtonPanel.add(retrievalOverdueButton);
-        
-        retrievalPanel.add(retrievalButtonPanel, BorderLayout.SOUTH);
-        
-        retrievalTable = new JTable();
-        retrievalTable.setEnabled(false);
-        retrievalTableScrollPane = new JScrollPane(retrievalTable);
-        
-        retrievalPanel.add(retrievalTableScrollPane, BorderLayout.CENTER);    
-
-        libraryTabbedPane.addTab("Retrieval", retrievalPanel);
-        
-        //Search Section
-        searchPanel = new JPanel(new BorderLayout());
-        searchButtonPanel = new JPanel(new GridLayout(1, 3, 3, 3));
-        searchUIPanel = new JPanel();
-        searchButtonPanel.add(loansCheckInBtn);
-        searchButtonPanel.add(loansCheckOutBtn);
-        searchPanel.add(searchButtonPanel, BorderLayout.SOUTH);
-
-
-        searchInfoLabel = new JLabel("Search By:");
-        authorRadioButton = new JRadioButton("Author");
-        subjectRadioButton = new JRadioButton("Subject");
-          
-        //searchGroup = new ButtonGroup();
-        //searchGroup.add(subjectRadioButton);
-        //searchGroup.add(authorRadioButton);
-        
-        searchUIPanel.add(searchInfoLabel);
-        //searchUIPanel.add(authorRadioButton);
-        //searchUIPanel.add(subjectRadioButton);
-
-        //authorComboBox, subjectComboBox
-        authorComboBox = new JComboBox();
-        subjectComboBox = new JComboBox();
-        //unverified if it works yet but hoping it does
-        BoundsPopupMenuListener listener = new BoundsPopupMenuListener(true, false);
-        authorComboBox.addPopupMenuListener( listener );
-        authorComboBox.setPrototypeDisplayValue("Choose an Author");
-        authorComboBox.setEditable(false);
-        searchUIPanel.add(authorComboBox);
-
-        subjectComboBox.addPopupMenuListener( listener );
-        subjectComboBox.setPrototypeDisplayValue("Choose a Subject");
-        subjectComboBox.setEditable(false);
-        searchUIPanel.add(subjectComboBox);
-        
-        searchPanel.add(searchUIPanel, BorderLayout.NORTH);
-        
-        searchTable = new JTable();
-        searchTable.setEnabled(false);
-        searchTableScrollPane = new JScrollPane(searchTable);
-        
-        searchPanel.add(searchTableScrollPane, BorderLayout.CENTER);    
-        
-        libraryTabbedPane.addTab("Search", searchPanel);
-        
-        //display it
-        this.setVisible(true);
-
-    }//end constructor
-
-    //When we have a button clicked we fire off a listener to all buttons and in our controller we will
-    //parse through and delegate the events properly.
-	public void addListener(ActionListener generalListener )
-	{
-		//User Tab Button Listeners
-		usersSaveButton.addActionListener(generalListener);
-		usersUpdateButton.addActionListener(generalListener);
-		usersNewButton.addActionListener(generalListener);
-		addUserDialogButton.addActionListener(generalListener);
-		booksAddBookButton.addActionListener(generalListener);
-		
-		//Books Tab Button Listeners
-		booksAddBookButton.addActionListener(generalListener);
-		
-		//Loans Tab Button Listeners
-		//Will have a dialogue loan button listener to put here eventually, I reckon
-        loansCheckInBtn.addActionListener(generalListener);
-        loansCheckOutBtn.addActionListener(generalListener);
-        
-        //Retrieval Tab Button Listeners
-        retrievalBooksButton.addActionListener(generalListener);
-        retrievalBooksOnLoanButton.addActionListener(generalListener);
-        retrievalUsersBorrowButton.addActionListener(generalListener);
-        retrievalOverdueButton.addActionListener(generalListener);
-        
-        //Search Tab Button Listeners
-        subjectComboBox.addActionListener(generalListener);
-        authorComboBox.addActionListener(generalListener);
-        loanDialog.acceptButton.addActionListener(generalListener);
-	}
 
 }//end class
