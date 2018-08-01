@@ -424,10 +424,7 @@ public class LibrarySystemModel
 
         try{
             books = query.executeQuery(
-                    "SELECT * FROM info5051_books.book " +
-                        "INNER JOIN info5051_books.book_loan " +
-                        "INNER JOIN info5051_books.borrower " +
-                        "WHERE CURDATE() > info5051_books.book_loan.date_due AND info5051_books.book_loan.date_returned IS NULL;"
+                    "SELECT BookID, Title, ISBN, Edition_Number, Subject, Comment, First_Name, Last_Name FROM book bks INNER JOIN book_loan bkln ON bks.BookID = bkln.Book_BookID INNER JOIN borrower brwr ON bkln.Borrower_Borrower_ID = brwr.Borrower_ID WHERE Available = 0 AND CURDATE() > date_due ORDER BY Last_Name"
             );
 
             overdueBooks = returnTableModelFromResultSet(books);
