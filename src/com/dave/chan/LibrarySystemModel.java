@@ -82,7 +82,7 @@ public class LibrarySystemModel
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    private DefaultTableModel returnTableModelFromResultSet(ResultSet rs){
+    private DefaultTableModel returnTableModelFromResultSet(ResultSet rs) {
         try {
             ResultSetMetaData metaData = rs.getMetaData();
             int numberOfColumns = metaData.getColumnCount();

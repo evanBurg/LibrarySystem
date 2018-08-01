@@ -26,9 +26,7 @@ public class LibrarySystemView extends JFrame
 	JFrame libraryFrame;
 	
 	JComboBox authorComboBox, subjectComboBox;
-	
-	ButtonGroup searchGroup;
-	
+		
 	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, retrievalPanel, booksButtonPanel, 
 				bookFormPanel, booksTitlePanel, hubBtnPanel, retrievalBtnPanel, searchPanel, searchUIPanel, searchButtonPanel
 				, addBookPanel;
@@ -69,7 +67,7 @@ public class LibrarySystemView extends JFrame
         
         //method calls to load different view tabs in our system
         loadUserView();
-        loadHubView();
+        loadIndexView();
         loadSearchView();
                       
         //display it
@@ -77,7 +75,7 @@ public class LibrarySystemView extends JFrame
 
     }//end constructor
     
-    private void loadHubView()
+    private void loadIndexView()
     {
     	 retrievalPanel = new JPanel(new BorderLayout());
     	 
@@ -88,8 +86,9 @@ public class LibrarySystemView extends JFrame
          
          retrievalBooksButton = new JButton("Book Index");
          retrievalOverdueButton = new JButton("Overdue Index");
-         retrievalBooksOnLoanButton = new JButton("Checked Out");
-         retrievalUsersBorrowButton = new JButton("Borrowing Books");
+         retrievalUsersBorrowButton = new JButton("Borrowers Index");
+         retrievalBooksOnLoanButton = new JButton("Checked Out Index");
+
          
          addBookBtn = new JButton("Add New Book");
          addBookPanel = new JPanel();
@@ -111,7 +110,7 @@ public class LibrarySystemView extends JFrame
          retrievalPanel.add(retrievalTableScrollPane, BorderLayout.CENTER); 
          retrievalPanel.add(hubBtnPanel, BorderLayout.SOUTH);
 
-         libraryTabbedPane.addTab("Retrieval", retrievalPanel);
+         libraryTabbedPane.addTab("Index", retrievalPanel);
     }
     
     private void loadUserView()
@@ -188,25 +187,20 @@ public class LibrarySystemView extends JFrame
 		usersUpdateButton.addActionListener(generalListener);
 		usersNewButton.addActionListener(generalListener);
 		addUserDialogButton.addActionListener(generalListener);
-		
-		//Books Tab Button Listeners
-		//booksAddBookButton.addActionListener(generalListener);
-		
-		//Loans Tab Button Listeners
-		//Will have a dialogue loan button listener to put here eventually, I reckon
-        searchCheckInBtn.addActionListener(generalListener);
-        searchCheckOutBtn.addActionListener(generalListener);
-        
-        //Retrieval Tab Button Listeners
+	    
+        //Index Tab Button Listeners
         retrievalBooksButton.addActionListener(generalListener);
         retrievalBooksOnLoanButton.addActionListener(generalListener);
         retrievalUsersBorrowButton.addActionListener(generalListener);
         retrievalOverdueButton.addActionListener(generalListener);
+        addBookBtn.addActionListener(generalListener);
         
         //Search Tab Button Listeners
         subjectComboBox.addActionListener(generalListener);
         authorComboBox.addActionListener(generalListener);
         loanDialog.acceptButton.addActionListener(generalListener);
+        searchCheckInBtn.addActionListener(generalListener);
+        searchCheckOutBtn.addActionListener(generalListener);
 	}
 	
 	public class AddUserDialog extends JFrame{

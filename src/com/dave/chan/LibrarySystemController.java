@@ -34,7 +34,6 @@ public class LibrarySystemController
 
         loadUsers();
         loadBooks();
-        loadLoans();
         loadAuthors();
         loadSubject();
 
