@@ -197,7 +197,7 @@ public class LibrarySystemController
             	loadOverdue();
             }
             if(e.getSource().equals(theView.addBookBtn)) {
-            	 //theView.addUserDialog.setVisible(true);
+            	theView.addBookDialog.setVisible(true);
             }
             
         }

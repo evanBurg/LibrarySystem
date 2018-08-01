@@ -40,6 +40,8 @@ public class LibrarySystemView extends JFrame
 		
 	AddUserDialog addUserDialog;
 	
+	AddBookDialog addBookDialog;
+	
 	LoanDialog loanDialog;
 	
     public LibrarySystemView()
@@ -70,6 +72,8 @@ public class LibrarySystemView extends JFrame
     private void loadIndexView()
     {
     	 retrievalPanel = new JPanel(new BorderLayout());
+    	 
+    	 addBookDialog = new AddBookDialog();
     	 
          hubBtnPanel = new JPanel(new BorderLayout());
          
@@ -191,6 +195,53 @@ public class LibrarySystemView extends JFrame
         searchCheckOutBtn.addActionListener(generalListener);
 	}
 	
+	public class AddBookDialog extends JFrame{
+	    JLabel addBookTitleLabel, addBookSubjectLabel, addBookEditionLabel, addBookAuthorLabel;
+        JTextField addBookTitle, addBookSubject, assBookEdition;
+        JPanel inputPanel, buttonPanel;
+        JComboBox addBookAuthorCombo;
+        public AddBookDialog(){
+            super("Add Book");
+            this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+            this.setLayout(new BorderLayout() );//ANONYMOUS layout object
+            this.setSize(250,180);
+            this.setLocationRelativeTo(null);
+
+            addBookTitleLabel = new JLabel("Title:");
+            addBookSubjectLabel = new JLabel("Subject:");
+            addBookEditionLabel = new JLabel("Edition:");
+            addBookTitleLabel.setHorizontalAlignment(JLabel.CENTER);
+            addBookSubjectLabel.setHorizontalAlignment(JLabel.CENTER);
+            addBookEditionLabel.setHorizontalAlignment(JLabel.CENTER);
+            
+            addBookAuthorLabel = new JLabel("Author(s)");
+            addBookAuthorLabel.setHorizontalAlignment(JLabel.CENTER);
+            addBookAuthorCombo = new JComboBox();
+
+            addBookTitle = new JTextField();
+            addBookSubject = new JTextField();
+            assBookEdition = new JTextField();
+
+            addUserDialogButton = new JButton("Add Author");
+
+            inputPanel = new JPanel(new GridLayout(4, 2, 30, 10));
+            this.add(inputPanel, BorderLayout.CENTER);
+
+            inputPanel.add(addBookTitleLabel);
+            inputPanel.add(addBookTitle);
+            inputPanel.add(addBookSubjectLabel);
+            inputPanel.add(addBookSubject);
+            inputPanel.add(addBookEditionLabel);
+            inputPanel.add(assBookEdition);
+            inputPanel.add(addBookAuthorLabel);
+            inputPanel.add(addBookAuthorCombo);
+            
+            buttonPanel = new JPanel();
+            buttonPanel.add(addUserDialogButton);
+            this.add(buttonPanel, BorderLayout.SOUTH);
+        }
+    }
+	
 	public class AddUserDialog extends JFrame{
 	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
         JTextField addUserFirstName, addUserLastName, addUserEmail;
@@ -238,7 +289,7 @@ public class LibrarySystemView extends JFrame
 	    boolean isLoaning;
         JButton acceptButton;
         public LoanDialog(){
-            super("Library System");
+            super("New Loan");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new GridLayout(4,1, 3, 3) );//ANONYMOUS layout object
             this.setSize(500,200);
