@@ -26,9 +26,7 @@ public class LibrarySystemView extends JFrame
 	JFrame libraryFrame;
 	
 	JComboBox authorComboBox, subjectComboBox;
-	
-	ButtonGroup searchGroup;
-	
+		
 	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, retrievalPanel, booksButtonPanel, 
 				bookFormPanel, booksTitlePanel, hubBtnPanel, retrievalBtnPanel, searchPanel, searchUIPanel, searchButtonPanel
 				, addBookPanel;

@@ -34,7 +34,6 @@ public class LibrarySystemController
 
         loadUsers();
         loadBooks();
-        loadLoans();
         loadAuthors();
         loadSubject();
 
@@ -66,8 +65,8 @@ public class LibrarySystemController
         DefaultTableModel loans = theModel.getAllLoanedBooks();
         loans.setColumnIdentifiers(loanColNames);
         if(loans.getRowCount() > 0) {
-            theView.loansTable.setModel(loans);
-            TableColumnModel tcm = theView.loansTable.getColumnModel();
+            theView.retrievalTable.setModel(loans);
+            TableColumnModel tcm = theView.retrievalTable.getColumnModel();
             tcm.removeColumn(tcm.getColumn(0));
         }
     }
