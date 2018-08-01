@@ -29,6 +29,7 @@ public class LibrarySystemModel
     private DefaultTableModel loans;
     private DefaultTableModel users;
     private DefaultComboBoxModel<String> authors;
+    private DefaultTableModel overdueBooks;
     private Connection connection;
 
     public LibrarySystemModel(){
@@ -52,6 +53,12 @@ public class LibrarySystemModel
     public DefaultTableModel getUsers(){
         getAllBorrowers();
         return users;
+    }
+    
+    public DefaultTableModel getOverdue()
+    {
+    	getOverdueBooks();
+    	return overdueBooks;
     }
 
     public DefaultTableModel getLoans(){
@@ -411,7 +418,7 @@ public class LibrarySystemModel
         }
     }
 
-    public DefaultTableModel getOverdueBooks(){
+    private void getOverdueBooks(){
         Statement query = null;
         ResultSet books = null;
 
@@ -423,20 +430,17 @@ public class LibrarySystemModel
                         "WHERE CURDATE() > info5051_books.book_loan.date_due AND info5051_books.book_loan.date_returned IS NULL;"
             );
 
-            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+            overdueBooks = returnTableModelFromResultSet(books);
 
             if(books != null)
                 books.close();
             if(query != null)
                 query.close();
 
-            return theBooks;
         }catch (Exception ex){
             throwError(ex.getMessage());
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
-
-            return null;
         }
     }
 
