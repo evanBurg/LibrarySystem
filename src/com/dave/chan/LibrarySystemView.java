@@ -29,7 +29,7 @@ public class LibrarySystemView extends JFrame
 	ButtonGroup searchGroup;
 	
 	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, loansPanel, retrievalPanel, booksButtonPanel, 
-				bookFormPanel, booksTitlePanel, loansButtonPanel, retrievalButtonPanel, searchPanel, searchUIPanel;
+				bookFormPanel, booksTitlePanel, loansButtonPanel, retrievalButtonPanel, searchPanel, searchUIPanel, searchButtonPanel;
 	
 	JTable usersTable, loansTable, retrievalTable, searchTable;
 	
@@ -131,7 +131,6 @@ public class LibrarySystemView extends JFrame
 
         //Users Section
         usersPanel = new JPanel(new BorderLayout());
-
     	usersTable = new JTable();
     	usersTable.setEnabled(false);
         usersTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
@@ -280,9 +279,13 @@ public class LibrarySystemView extends JFrame
         
         //Search Section
         searchPanel = new JPanel(new BorderLayout());
-        
+        searchButtonPanel = new JPanel(new GridLayout(1, 3, 3, 3));
         searchUIPanel = new JPanel();
-        
+        searchButtonPanel.add(loansCheckInBtn);
+        searchButtonPanel.add(loansCheckOutBtn);
+        searchPanel.add(searchButtonPanel, BorderLayout.SOUTH);
+
+
         searchInfoLabel = new JLabel("Search By:");
         authorRadioButton = new JRadioButton("Author");
         subjectRadioButton = new JRadioButton("Subject");
