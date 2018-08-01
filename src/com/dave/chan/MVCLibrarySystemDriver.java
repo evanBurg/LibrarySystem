@@ -32,12 +32,12 @@ public class MVCLibrarySystemDriver
     {
         // First, create objects of the view class and the model class
         setLookAndFeel();
-        LibrarySystemView theView = new LibrarySystemView();
-        LibrarySystemModel theModel = new LibrarySystemModel();
+            LibrarySystemView theView = new LibrarySystemView();
+            LibrarySystemModel theModel = new LibrarySystemModel();
 
-        //NOW, create an object of the Controller class and pass it the view object
-        // and the model object
-        LibrarySystemController theController = new LibrarySystemController(theView,theModel);
+            //NOW, create an object of the Controller class and pass it the view object
+            // and the model object
+            LibrarySystemController theController = new LibrarySystemController(theView, theModel);
     }
 
 }

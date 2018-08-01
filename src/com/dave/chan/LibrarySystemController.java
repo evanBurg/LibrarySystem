@@ -12,8 +12,10 @@ package com.dave.chan;
  * Date: Jul 12, 2016
  */
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -60,7 +62,7 @@ public class LibrarySystemController
     }
 
     private void loadLoans(){
-        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "First", "Last"};
+        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Comment", "First", "Last"};
         DefaultTableModel loans = theModel.getAllLoanedBooks();
         loans.setColumnIdentifiers(loanColNames);
         theView.loansTable.setModel(loans);
@@ -83,6 +85,25 @@ public class LibrarySystemController
     public void addNewUser(String first, String last, String email){
         theModel.addNewBorrower(first, last, email);
     }
+
+    public void searchBooks(){
+        TableColumnModel tcm = null;
+
+        if(theView.subjectComboBox.getSelectedItem().toString().equals("Choose a Subject")) {
+            theView.searchTable.setModel(theModel.getBooksbyAuthor(theView.authorComboBox.getSelectedItem().toString()));
+            tcm = theView.searchTable.getColumnModel();
+            tcm.removeColumn( tcm.getColumn(0) );
+        }else if(theView.authorComboBox.getSelectedItem().toString().equals("Choose an Author")) {
+            theView.searchTable.setModel(theModel.getBooksbySubject(theView.subjectComboBox.getSelectedItem().toString()));
+            tcm = theView.searchTable.getColumnModel();
+            tcm.removeColumn( tcm.getColumn(0) );
+        }else if(!theView.authorComboBox.getSelectedItem().toString().equals("Choose an Author") && !theView.subjectComboBox.getSelectedItem().toString().equals("Choose a Subject")) {
+            theView.searchTable.setModel(theModel.getBooksByAuthorAndSubject(theView.authorComboBox.getSelectedItem().toString(), theView.subjectComboBox.getSelectedItem().toString()));
+            tcm = theView.searchTable.getColumnModel();
+            tcm.removeColumn( tcm.getColumn(0) );
+        }
+    }
+
 
     //PUT INNER CLASS HERE
     private class BookListener implements ActionListener
@@ -107,12 +128,47 @@ public class LibrarySystemController
                 loadUsers();
             }
             if(e.getSource().equals(theView.authorComboBox) || e.getSource().equals(theView.subjectComboBox)){
-                if(theView.subjectComboBox.getSelectedItem().toString().equals("Choose a Subject"))
-                    theView.searchTable.setModel(theModel.getBooksbyAuthor(theView.authorComboBox.getSelectedItem().toString()));
-                else if(theView.authorComboBox.getSelectedItem().toString().equals("Choose an Author"))
-                    theView.searchTable.setModel(theModel.getBooksbySubject(theView.subjectComboBox.getSelectedItem().toString()));
-                else if(!theView.authorComboBox.getSelectedItem().toString().equals("Choose an Author") && !theView.subjectComboBox.getSelectedItem().toString().equals("Choose a Subject"))
-                    theView.searchTable.setModel(theModel.getBooksByAuthorAndSubject(theView.authorComboBox.getSelectedItem().toString(), theView.subjectComboBox.getSelectedItem().toString()));
+                searchBooks();
+            }
+            if(e.getSource().equals(theView.loansCheckOutBtn) || e.getSource().equals(theView.loansCheckInBtn)){
+                TableModel books = theView.searchTable.getModel();
+                TableModel users = theModel.getAllBorrowers();
+                DefaultComboBoxModel<String> chosenBooks = new DefaultComboBoxModel<String>();
+                DefaultComboBoxModel<String> bookISBNs = new DefaultComboBoxModel<String>();
+                DefaultComboBoxModel<String> borrowers = new DefaultComboBoxModel<String>();
+                DefaultComboBoxModel<String> borrowersIds = new DefaultComboBoxModel<String>();
+                for(int i = 0; i < users.getRowCount(); i++){
+                    borrowersIds.addElement(users.getValueAt(i, 0).toString());
+                    borrowers.addElement(users.getValueAt(i, 1).toString());
+                }
+                if(e.getSource().equals(theView.loansCheckOutBtn)) {
+                    for(int i = 0; i < books.getRowCount(); i++){
+                        if(books.getValueAt(i, 5).toString().equals("1")) {
+                            bookISBNs.addElement(books.getValueAt(i, 2).toString());
+                            chosenBooks.addElement(books.getValueAt(i, 1).toString());
+                        }
+                    }
+                    theView.loanDialog.openLoanDialog(true, chosenBooks, theView.searchTable.getModel(), bookISBNs, borrowers, borrowersIds);
+                }else {
+                    for(int i = 0; i < books.getRowCount(); i++){
+                        if(books.getValueAt(i, 5).toString().equals("0")) {
+                            bookISBNs.addElement(books.getValueAt(i, 2).toString());
+                            chosenBooks.addElement(books.getValueAt(i, 1).toString());
+                        }
+                    }
+                    theView.loanDialog.openLoanDialog(false, chosenBooks, theView.searchTable.getModel(), bookISBNs, borrowers, borrowersIds);
+                }
+            }
+            if(e.getSource().equals(theView.loanDialog.acceptButton)){
+                int selectedBook = -1;
+                selectedBook = theView.loanDialog.booksToChooseFrom.getSelectedIndex();
+                int selectedBorrower = -1;
+                selectedBorrower = theView.loanDialog.borrowersIds.getSelectedIndex();
+                selectedBorrower = Integer.parseInt(theView.loanDialog.borrowersIds.getItemAt(selectedBorrower));
+                theModel.checkABookInorOut(theView.loanDialog.isLoaning, theView.loanDialog.ISBNs.getItemAt(selectedBook), selectedBorrower);
+                searchBooks();
+                loadLoans();
+                theView.loanDialog.setVisible(false);
             }
         }
 
