@@ -130,7 +130,7 @@ public class LibrarySystemController
             if(e.getSource().equals(theView.authorComboBox) || e.getSource().equals(theView.subjectComboBox)){
                 searchBooks();
             }
-            if(e.getSource().equals(theView.loansCheckOutBtn) || e.getSource().equals(theView.loansCheckInBtn)){
+            if(e.getSource().equals(theView.searchCheckOutBtn) || e.getSource().equals(theView.searchCheckInBtn)){
                 TableModel books = theView.searchTable.getModel();
                 TableModel users = theModel.getAllBorrowers();
                 DefaultComboBoxModel<String> chosenBooks = new DefaultComboBoxModel<String>();
@@ -141,7 +141,7 @@ public class LibrarySystemController
                     borrowersIds.addElement(users.getValueAt(i, 0).toString());
                     borrowers.addElement(users.getValueAt(i, 1).toString());
                 }
-                if(e.getSource().equals(theView.loansCheckOutBtn)) {
+                if(e.getSource().equals(theView.searchCheckOutBtn)) {
                     for(int i = 0; i < books.getRowCount(); i++){
                         if(books.getValueAt(i, 5).toString().equals("1")) {
                             bookISBNs.addElement(books.getValueAt(i, 2).toString());
