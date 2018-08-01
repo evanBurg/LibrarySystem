@@ -90,6 +90,12 @@ public class LibrarySystemController
     public void searchBooks(){
         TableColumnModel tcm = null;
 
+
+        if(theView.authorComboBox.getSelectedItem().toString().equals("Choose an Author") && theView.subjectComboBox.getSelectedItem().toString().equals("Choose a Subject")) {
+            theView.searchTable.setModel(new DefaultTableModel());
+            return;
+        }
+
         if(theView.subjectComboBox.getSelectedItem().toString().equals("Choose a Subject")) {
             theView.searchTable.setModel(theModel.getBooksbyAuthor(theView.authorComboBox.getSelectedItem().toString()));
             tcm = theView.searchTable.getColumnModel();
