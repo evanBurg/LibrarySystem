@@ -31,13 +31,20 @@ public class MVCLibrarySystemDriver
     public static void main(String[] args)
     {
         // First, create objects of the view class and the model class
-        setLookAndFeel();
-            LibrarySystemView theView = new LibrarySystemView();
-            LibrarySystemModel theModel = new LibrarySystemModel();
+        LibrarySystemView theView = null;
+        LibrarySystemModel theModel = null;
+        try {
+            setLookAndFeel();
+            theView = new LibrarySystemView();
+            theModel = new LibrarySystemModel();
 
             //NOW, create an object of the Controller class and pass it the view object
             // and the model object
             LibrarySystemController theController = new LibrarySystemController(theView, theModel);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }

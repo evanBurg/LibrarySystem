@@ -45,7 +45,7 @@ public class LibrarySystemController
     private void loadUsers() {
         // TableModel definition
         String[] userColNames = {"ID", "First Name", "Last Name", "E-mail"};
-        DefaultTableModel users = theModel.getAllBorrowers();
+        DefaultTableModel users = theModel.getUsers();
         users.setColumnIdentifiers(userColNames);
         theView.usersTable.setModel(users);
         TableColumnModel tcm =  theView.usersTable.getColumnModel();
@@ -54,7 +54,7 @@ public class LibrarySystemController
 
     private void loadBooks(){
         String[] bookColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Available"};
-        DefaultTableModel books = theModel.getAllBooks();
+        DefaultTableModel books = theModel.getBooks();
         books.setColumnIdentifiers(bookColNames);
         theView.retrievalTable.setModel(books);
         TableColumnModel tcm =  theView.retrievalTable.getColumnModel();
@@ -63,11 +63,11 @@ public class LibrarySystemController
 
     private void loadLoans(){
         String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Comment", "First", "Last"};
-        DefaultTableModel loans = theModel.getAllLoanedBooks();
+        DefaultTableModel loans = theModel.getLoans();
         loans.setColumnIdentifiers(loanColNames);
         if(loans.getRowCount() > 0) {
-            theView.loansTable.setModel(loans);
-            TableColumnModel tcm = theView.loansTable.getColumnModel();
+            theView.retrievalTable.setModel(loans);
+            TableColumnModel tcm = theView.retrievalTable.getColumnModel();
             tcm.removeColumn(tcm.getColumn(0));
         }
     }
@@ -77,7 +77,7 @@ public class LibrarySystemController
     }
 
     public void loadAuthors(){
-        theView.authorComboBox.setModel(theModel.getAllAuthors());
+        theView.authorComboBox.setModel(theModel.getAuthors());
     }
 
     public void updateUsers(){
@@ -134,7 +134,7 @@ public class LibrarySystemController
             }
             if(e.getSource().equals(theView.searchCheckOutBtn) || e.getSource().equals(theView.searchCheckInBtn)){
                 TableModel books = theView.searchTable.getModel();
-                TableModel users = theModel.getAllBorrowers();
+                TableModel users = theModel.getUsers();
                 DefaultComboBoxModel<String> chosenBooks = new DefaultComboBoxModel<String>();
                 DefaultComboBoxModel<String> bookISBNs = new DefaultComboBoxModel<String>();
                 DefaultComboBoxModel<String> borrowers = new DefaultComboBoxModel<String>();
