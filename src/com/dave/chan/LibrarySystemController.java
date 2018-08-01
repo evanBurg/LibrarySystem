@@ -160,8 +160,10 @@ public class LibrarySystemController
                 theView.loanDialog.openLoanDialog(true, chosenBooks, theView.searchTable.getModel(), bookISBNs, borrowers, borrowersIds);
             }
             if(e.getSource().equals(theView.loanDialog.acceptButton)){
-                int selectedBook = theView.loanDialog.booksToChooseFrom.getSelectedIndex();
-                int selectedBorrower = theView.loanDialog.booksToChooseFrom.getSelectedIndex();
+                int selectedBook = -1;
+                selectedBook = theView.loanDialog.booksToChooseFrom.getSelectedIndex();
+                int selectedBorrower = -1;
+                selectedBorrower = theView.loanDialog.booksToChooseFrom.getSelectedIndex();
                 theModel.checkABookInorOut(theView.loanDialog.isLoaning, theView.loanDialog.ISBNs.getItemAt(selectedBook), Integer.parseInt(theView.loanDialog.borrowersIds.getItemAt(selectedBorrower)));
             }
         }
