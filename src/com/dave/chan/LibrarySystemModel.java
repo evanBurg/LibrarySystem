@@ -107,7 +107,7 @@ public class LibrarySystemModel
             // FROM book bks INNER JOIN book_author bkath ON bks.BookID = bkath.Book_BookID
             // INNER JOIN author athrs ON bkath.Author_AuthorID = athrs.AuthorID
             // WHERE last_name = ? AND first_name = ? AND subject = ?"
-            books = query.executeQuery("SELECT BookID, Title, ISBN, Edition_Number, Subject, First_Name, Last_Name FROM book bks INNER JOIN book_loan bkln ON bks.BookID = bkln.Book_BookID INNER JOIN borrower brwr ON bkln.Borrower_Borrower_ID = brwr.Borrower_ID WHERE Available = 0 ORDER BY Last_Name");
+            books = query.executeQuery("SELECT BookID, Title, ISBN, Edition_Number, Subject, Comment, First_Name, Last_Name FROM book bks INNER JOIN book_loan bkln ON bks.BookID = bkln.Book_BookID INNER JOIN borrower brwr ON bkln.Borrower_Borrower_ID = brwr.Borrower_ID WHERE Available = 0 ORDER BY Last_Name");
 
             DefaultTableModel theBooks = returnTableModelFromResultSet(books);
 
@@ -320,7 +320,7 @@ public class LibrarySystemModel
                     query.executeUpdate("UPDATE book_loan SET date_returned = CURDATE() WHERE Book_BookID =" + BookID);
                     query.executeUpdate("UPDATE Book SET Available = 1 WHERE ISBN = '"+ ISBN +"'");
             }else{
-                query.executeUpdate("INSERT INTO book_loan(Book_BookID, Borrower_Borrower_ID, date_out, date_due) VALUES("+BookID+", "+ BorrowerId +", CURDATE(), DATE_ADD(CURDATE(), INTERVAL 14 DAY))");
+                query.executeUpdate("INSERT INTO book_loan(Book_BookID, Borrower_Borrower_ID, Comment, date_out, date_due) VALUES("+BookID+", "+ BorrowerId +", DATE_FORMAT(CURDATE(), 'Borrowed on %M %e, %Y'), CURDATE(), DATE_ADD(CURDATE(), INTERVAL 14 DAY))");
                 query.executeUpdate("UPDATE Book SET Available = 0 WHERE ISBN = '"+ ISBN +"'");
             }
 
