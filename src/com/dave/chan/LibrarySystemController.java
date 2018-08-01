@@ -133,9 +133,11 @@ public class LibrarySystemController
                 DefaultComboBoxModel<String> borrowers = new DefaultComboBoxModel<String>();
                 DefaultComboBoxModel<String> borrowersIds = new DefaultComboBoxModel<String>();
                 for(int i = 0; i < books.getRowCount(); i++){
-                    chosenBooks.addElement(books.getValueAt(i, 1).toString());
                     bookISBNs.addElement(books.getValueAt(i, 2).toString());
-                    borrowersIds.addElement(users.getValueAt(i, 1).toString());
+                    chosenBooks.addElement(books.getValueAt(i, 1).toString());
+                }
+                for(int i = 0; i < users.getRowCount(); i++){
+                    borrowersIds.addElement(users.getValueAt(i, 0).toString());
                     borrowers.addElement(users.getValueAt(i, 1).toString());
                 }
                 theView.loanDialog.openLoanDialog(false, chosenBooks, theView.searchTable.getModel(), bookISBNs, borrowers, borrowersIds);

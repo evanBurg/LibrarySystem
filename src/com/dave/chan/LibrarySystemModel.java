@@ -310,7 +310,6 @@ public class LibrarySystemModel
         try{
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
-            query.executeUpdate("UPDATE Book SET Available = 0 WHERE ISBN = '"+ ISBN +"'");
             bookID = query.executeQuery("SELECT BookID FROM Book WHERE ISBN = '"+ ISBN +"'");
             int BookID = 0;
             if(bookID.next())
@@ -318,9 +317,11 @@ public class LibrarySystemModel
 
             if(!isCheckingOut) {
                 if (BookID != 0)
-                    query.executeUpdate("UPDATE book_loan SET date_returned CURDATE() WHERE Book_BookID =" + BookID);
+                    query.executeUpdate("UPDATE book_loan SET date_returned = CURDATE() WHERE Book_BookID =" + BookID);
+                    query.executeUpdate("UPDATE Book SET Available = 1 WHERE ISBN = '"+ ISBN +"'");
             }else{
                 query.executeUpdate("INSERT INTO book_loan(Book_BookID, Borrower_Borrower_ID, date_out, date_due) VALUES("+BookID+", "+ BorrowerId +", CURDATE(), DATE_ADD(CURDATE(), INTERVAL 14 DAY))");
+                query.executeUpdate("UPDATE Book SET Available = 0 WHERE ISBN = '"+ ISBN +"'");
             }
 
             if(bookID != null)
