@@ -188,10 +188,9 @@ public class LibrarySystemView extends JFrame
 		usersUpdateButton.addActionListener(generalListener);
 		usersNewButton.addActionListener(generalListener);
 		addUserDialogButton.addActionListener(generalListener);
-		booksAddBookButton.addActionListener(generalListener);
 		
 		//Books Tab Button Listeners
-		booksAddBookButton.addActionListener(generalListener);
+		//booksAddBookButton.addActionListener(generalListener);
 		
 		//Loans Tab Button Listeners
 		//Will have a dialogue loan button listener to put here eventually, I reckon

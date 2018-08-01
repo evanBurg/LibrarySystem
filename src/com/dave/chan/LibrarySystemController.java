@@ -65,9 +65,11 @@ public class LibrarySystemController
         String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Comment", "First", "Last"};
         DefaultTableModel loans = theModel.getAllLoanedBooks();
         loans.setColumnIdentifiers(loanColNames);
-        theView.loansTable.setModel(loans);
-        TableColumnModel tcm =  theView.loansTable.getColumnModel();
-        tcm.removeColumn( tcm.getColumn(0) );
+        if(loans.getRowCount() > 0) {
+            theView.loansTable.setModel(loans);
+            TableColumnModel tcm = theView.loansTable.getColumnModel();
+            tcm.removeColumn(tcm.getColumn(0));
+        }
     }
 
     public void loadSubject(){
