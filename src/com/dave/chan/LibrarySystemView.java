@@ -23,29 +23,21 @@ public class LibrarySystemView extends JFrame
 	//class-wide
 	JTabbedPane libraryTabbedPane;
 	
-	JFrame libraryFrame;
-	
 	JComboBox authorComboBox, subjectComboBox;
 		
-	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, retrievalPanel, booksButtonPanel, 
-				bookFormPanel, booksTitlePanel, hubBtnPanel, retrievalBtnPanel, searchPanel, searchUIPanel, searchButtonPanel
-				, addBookPanel;
+	JPanel basePanel, usersPanel, usersButtonPanel, retrievalPanel, hubBtnPanel, retrievalBtnPanel, searchPanel, 
+				searchUIPanel, searchButtonPanel, addBookPanel;
 	
-	JTable usersTable, retrievalTable, searchTable, loansTable;
-	
-	JRadioButton subjectRadioButton, authorRadioButton;
+	JTable usersTable, retrievalTable, searchTable;
 	
 	JScrollPane userTableScrollPane, retrievalTableScrollPane, searchTableScrollPane;
 	
-	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton, 
-			searchCheckOutBtn, searchCheckInBtn, addUserDialogButton, retrievalOverdueButton, retrievalUsersBorrowButton, 
+	JButton usersSaveButton, usersUpdateButton, usersNewButton, 
+			searchCheckOutBtn, searchCheckInBtn, addUserDialogButton, retrievalOverdueButton,
 			retrievalBooksOnLoanButton, retrievalBooksButton, addBookBtn;
 	
-	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel,
-				searchInfoLabel;
-	
-	JTextArea bookTitleTextArea, bookEditionTextArea, bookSubjectTextArea, bookAuthorFNTextArea;
-	
+	JLabel searchInfoLabel;
+		
 	AddUserDialog addUserDialog;
 	
 	LoanDialog loanDialog;
@@ -86,7 +78,6 @@ public class LibrarySystemView extends JFrame
          
          retrievalBooksButton = new JButton("Book Index");
          retrievalOverdueButton = new JButton("Overdue Index");
-         retrievalUsersBorrowButton = new JButton("Borrowers Index");
          retrievalBooksOnLoanButton = new JButton("Checked Out Index");
 
          
@@ -96,7 +87,6 @@ public class LibrarySystemView extends JFrame
          retrievalBtnPanel.add(retrievalBooksButton);
          retrievalBtnPanel.add(retrievalOverdueButton);
          retrievalBtnPanel.add(retrievalBooksOnLoanButton);
-         retrievalBtnPanel.add(retrievalUsersBorrowButton);
        
          addBookPanel.add(addBookBtn);
          
@@ -191,7 +181,6 @@ public class LibrarySystemView extends JFrame
         //Index Tab Button Listeners
         retrievalBooksButton.addActionListener(generalListener);
         retrievalBooksOnLoanButton.addActionListener(generalListener);
-        retrievalUsersBorrowButton.addActionListener(generalListener);
         retrievalOverdueButton.addActionListener(generalListener);
         addBookBtn.addActionListener(generalListener);
         
