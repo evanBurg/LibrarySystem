@@ -23,29 +23,21 @@ public class LibrarySystemView extends JFrame
 	//class-wide
 	JTabbedPane libraryTabbedPane;
 	
-	JFrame libraryFrame;
-	
 	JComboBox authorComboBox, subjectComboBox;
 		
-	JPanel basePanel, usersPanel, usersButtonPanel, booksPanel, retrievalPanel, booksButtonPanel, 
-				bookFormPanel, booksTitlePanel, hubBtnPanel, retrievalBtnPanel, searchPanel, searchUIPanel, searchButtonPanel
-				, addBookPanel;
+	JPanel basePanel, usersPanel, usersButtonPanel, retrievalPanel, hubBtnPanel, retrievalBtnPanel, searchPanel, 
+				searchUIPanel, searchButtonPanel, addBookPanel;
 	
-	JTable usersTable, retrievalTable, searchTable, loansTable;
-	
-	JRadioButton subjectRadioButton, authorRadioButton;
+	JTable usersTable, retrievalTable, searchTable;
 	
 	JScrollPane userTableScrollPane, retrievalTableScrollPane, searchTableScrollPane;
 	
-	JButton usersSaveButton, usersUpdateButton, usersNewButton, booksAddBookButton, 
-			searchCheckOutBtn, searchCheckInBtn, addUserDialogButton, retrievalOverdueButton, retrievalUsersBorrowButton, 
+	JButton usersSaveButton, usersUpdateButton, usersNewButton, 
+			searchCheckOutBtn, searchCheckInBtn, addUserDialogButton, retrievalOverdueButton,
 			retrievalBooksOnLoanButton, retrievalBooksButton, addBookBtn;
 	
-	JLabel bookTitleLabel, bookEditionLabel, bookSubjectLabel, bookAuthorFNLabel, booksTitleLabel, booksCurrentAuthorsLabel,
-				searchInfoLabel;
-	
-	JTextArea bookTitleTextArea, bookEditionTextArea, bookSubjectTextArea, bookAuthorFNTextArea;
-	
+	JLabel searchInfoLabel;
+		
 	AddUserDialog addUserDialog;
 	
 	LoanDialog loanDialog;
@@ -86,17 +78,14 @@ public class LibrarySystemView extends JFrame
          
          retrievalBooksButton = new JButton("Book Index");
          retrievalOverdueButton = new JButton("Overdue Index");
-         retrievalUsersBorrowButton = new JButton("Borrowers Index");
          retrievalBooksOnLoanButton = new JButton("Checked Out Index");
 
-         
          addBookBtn = new JButton("Add New Book");
          addBookPanel = new JPanel();
          
          retrievalBtnPanel.add(retrievalBooksButton);
          retrievalBtnPanel.add(retrievalOverdueButton);
          retrievalBtnPanel.add(retrievalBooksOnLoanButton);
-         retrievalBtnPanel.add(retrievalUsersBorrowButton);
        
          addBookPanel.add(addBookBtn);
          
@@ -191,7 +180,6 @@ public class LibrarySystemView extends JFrame
         //Index Tab Button Listeners
         retrievalBooksButton.addActionListener(generalListener);
         retrievalBooksOnLoanButton.addActionListener(generalListener);
-        retrievalUsersBorrowButton.addActionListener(generalListener);
         retrievalOverdueButton.addActionListener(generalListener);
         addBookBtn.addActionListener(generalListener);
         
@@ -208,15 +196,19 @@ public class LibrarySystemView extends JFrame
         JTextField addUserFirstName, addUserLastName, addUserEmail;
         JPanel inputPanel, buttonPanel;
         public AddUserDialog(){
-            super("Library System");
+            super("Add User");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-            this.setSize(300,200);
+            this.setSize(250,160);
             this.setLocationRelativeTo(null);
 
             addUserFirstNameLabel = new JLabel("First Name:");
             addUserLastNameLabel = new JLabel("Last Name:");
             addUserEmailLabel = new JLabel("Email:");
+            addUserFirstNameLabel.setHorizontalAlignment(JLabel.CENTER);
+            addUserLastNameLabel.setHorizontalAlignment(JLabel.CENTER);
+            addUserEmailLabel.setHorizontalAlignment(JLabel.CENTER);
+
 
             addUserFirstName = new JTextField();
             addUserLastName = new JTextField();
@@ -224,7 +216,7 @@ public class LibrarySystemView extends JFrame
 
             addUserDialogButton = new JButton("Add User");
 
-            inputPanel = new JPanel(new GridLayout(3, 2, 5, 35));
+            inputPanel = new JPanel(new GridLayout(3, 2, 30, 10));
             this.add(inputPanel, BorderLayout.CENTER);
 
             inputPanel.add(addUserFirstNameLabel);
