@@ -25,6 +25,55 @@ import java.util.Vector;
 
 public class LibrarySystemModel
 {
+    private DefaultTableModel books;
+    private DefaultTableModel loans;
+    private DefaultTableModel users;
+    private DefaultComboBoxModel<String> authors;
+    private Connection connection;
+
+    public LibrarySystemModel(){
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT", "root", "password");
+            getAuthors();
+            getUsers();
+            getLoans();
+            getBooks();
+        } catch (SQLException e){
+            throwError(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public DefaultComboBoxModel<String> getAuthors(){
+        getAllAuthors();
+        return authors;
+    }
+
+    public DefaultTableModel getUsers(){
+        getAllBorrowers();
+        return users;
+    }
+
+    public DefaultTableModel getLoans(){
+        getAllLoanedBooks();
+        return loans;
+    }
+
+    public DefaultTableModel getBooks(){
+        getAllBooks();
+        return books;
+    }
+
+    public void closeConnection(){
+        try {
+            if (!connection.isClosed())
+                connection.close();
+        }catch (SQLException e){
+            throwError(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     private void throwError(String message){
         JFrame frame = new JFrame();
         JOptionPane.showMessageDialog(frame,
@@ -66,76 +115,54 @@ public class LibrarySystemModel
         }
     }
 
-    public DefaultTableModel getAllBooks(){
-        Connection connection = null;
+    private void getAllBooks(){
         Statement query = null;
-        ResultSet books = null;
+        ResultSet booksrs = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
-            books = query.executeQuery("SELECT * FROM book");
+            booksrs = query.executeQuery("SELECT * FROM book");
 
-            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+            books = returnTableModelFromResultSet(booksrs);
 
-            if(books != null)
-                books.close();
+            if(booksrs != null)
+                booksrs.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
-
-            return theBooks;
         }catch (Exception ex){
             throwError(ex.getMessage());
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
-
-            return null;
         }
     }
 
-    public DefaultTableModel getAllLoanedBooks(){
-        Connection connection = null;
+    private void getAllLoanedBooks(){
         Statement query = null;
         ResultSet books = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
-            //"SELECT BookID, Title, ISBN, Edition_Number, Subject, Available
-            // FROM book bks INNER JOIN book_author bkath ON bks.BookID = bkath.Book_BookID
-            // INNER JOIN author athrs ON bkath.Author_AuthorID = athrs.AuthorID
-            // WHERE last_name = ? AND first_name = ? AND subject = ?"
             books = query.executeQuery("SELECT BookID, Title, ISBN, Edition_Number, Subject, Comment, First_Name, Last_Name FROM book bks INNER JOIN book_loan bkln ON bks.BookID = bkln.Book_BookID INNER JOIN borrower brwr ON bkln.Borrower_Borrower_ID = brwr.Borrower_ID WHERE Available = 0 ORDER BY Last_Name");
 
-            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+            loans = returnTableModelFromResultSet(books);
 
 
             if(books != null)
                 books.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
-
-            return theBooks;
         }catch (Exception ex){
             throwError(ex.getMessage());
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
-
-            return null;
         }
     }
 
     public DefaultComboBoxModel getAllSubjects(){
-        Connection connection = null;
         Statement query = null;
         ResultSet books = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
             books = query.executeQuery("SELECT DISTINCT subject FROM book");
 
@@ -150,8 +177,6 @@ public class LibrarySystemModel
                 books.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return theBooks;
         }catch (Exception ex){
@@ -163,48 +188,40 @@ public class LibrarySystemModel
         }
     }
 
-    public DefaultComboBoxModel getAllAuthors(){
-        Connection connection = null;
+    private void getAllAuthors(){
         Statement query = null;
-        ResultSet authors = null;
+        ResultSet authorsrs = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
-            authors = query.executeQuery("SELECT first_name, last_name FROM author");
+            authorsrs = query.executeQuery("SELECT first_name, last_name FROM author");
 
             DefaultComboBoxModel theAuthors = new DefaultComboBoxModel();
             theAuthors.addElement("Choose an Author");
 
 
-            while(authors.next()){
-                theAuthors.addElement(authors.getString("last_name") + ", " + authors.getString("first_name"));
+            while(authorsrs.next()){
+                theAuthors.addElement(authorsrs.getString("last_name") + ", " + authorsrs.getString("first_name"));
             }
 
-            if(authors != null)
-                authors.close();
+            if(authorsrs != null)
+                authorsrs.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
-            return theAuthors;
+            authors = theAuthors;
         }catch (Exception ex){
             throwError(ex.getMessage());
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
-
-            return null;
         }
     }
 
     public DefaultTableModel getBooksbySubject(String subject){
-        Connection connection = null;
         Statement query = null;
         ResultSet books = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
             books = query.executeQuery("SELECT * FROM book WHERE Subject = '" + subject + "'");
 
@@ -214,8 +231,6 @@ public class LibrarySystemModel
                 books.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return theBooks;
         }catch (Exception ex){
@@ -228,12 +243,10 @@ public class LibrarySystemModel
     }
 
     public DefaultTableModel getBooksByAuthorAndSubject(String author, String subject){
-        Connection connection = null;
         PreparedStatement query = null;
         ResultSet books = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.prepareStatement("SELECT BookID, Title, ISBN, Edition_Number, Subject, Available FROM book bks INNER JOIN book_author bkath ON bks.BookID = bkath.Book_BookID INNER JOIN author athrs ON bkath.Author_AuthorID = athrs.AuthorID WHERE last_name = ? AND first_name = ? AND subject = ?");
             String[] name = author.trim().split("\\s*,\\s*");
             String first = name[1];
@@ -249,8 +262,6 @@ public class LibrarySystemModel
                 books.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return theBooks;
         }catch (Exception ex){
@@ -263,12 +274,10 @@ public class LibrarySystemModel
     }
 
     public DefaultTableModel getBooksbyAuthor(String author){
-        Connection connection = null;
         PreparedStatement query = null;
         ResultSet books = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.prepareStatement("SELECT BookID, Title, ISBN, Edition_Number, Subject, Available FROM book bks INNER JOIN book_author bkath ON bks.BookID = bkath.Book_BookID INNER JOIN author athrs ON bkath.Author_AuthorID = athrs.AuthorID WHERE last_name = ? AND first_name = ?");
             String[] name = author.trim().split("\\s*,\\s*");
             String first = "";
@@ -289,8 +298,6 @@ public class LibrarySystemModel
                 books.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return theBooks;
         }catch (Exception ex){
@@ -303,12 +310,9 @@ public class LibrarySystemModel
     }
 
     public boolean checkABookInorOut(boolean isCheckingOut, String ISBN, int BorrowerId){
-        Connection connection = null;
         Statement query = null;
         ResultSet bookID = null;
-
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
             bookID = query.executeQuery("SELECT BookID FROM Book WHERE ISBN = '"+ ISBN +"'");
             int BookID = 0;
@@ -328,8 +332,6 @@ public class LibrarySystemModel
                 bookID.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return true;
         }catch (Exception ex){
@@ -340,41 +342,30 @@ public class LibrarySystemModel
         return false;
     }
 
-    public DefaultTableModel getAllBorrowers(){
-        Connection connection = null;
+    private void getAllBorrowers(){
         Statement query = null;
         ResultSet borrowers = null;
-
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
             borrowers = query.executeQuery("SELECT borrower_id, first_name, last_name, borrower_email FROM borrower ORDER BY last_name");
 
-            DefaultTableModel theBorrowers = returnTableModelFromResultSet(borrowers);
+            users = returnTableModelFromResultSet(borrowers);
 
             if(borrowers != null)
                 borrowers.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
-
-            return theBorrowers;
         }catch (Exception ex){
             throwError(ex.getMessage());
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
         }
-        return new DefaultTableModel();
     }
 
     public boolean updateBorrowers(DefaultTableModel model){
-        Connection connection = null;
         PreparedStatement query = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
-
             query = connection.prepareStatement("UPDATE borrower SET first_name = ?, last_name = ?, borrower_email = ? WHERE borrower_id = ?");
 
 
@@ -392,8 +383,6 @@ public class LibrarySystemModel
 
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return true;
         }catch (Exception ex){
@@ -404,20 +393,14 @@ public class LibrarySystemModel
     }
 
     public boolean addNewBorrower(String first, String last, String email){
-        Connection connection = null;
         Statement query = null;
-
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
-
             query = connection.createStatement();
 
             query.executeUpdate("INSERT INTO borrower (first_name, last_name, borrower_email) VALUES('"+ first +"', '"+ last +"', '"+ email +"')");
 
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return true;
         }catch (Exception ex){
@@ -429,16 +412,14 @@ public class LibrarySystemModel
     }
 
     public DefaultTableModel getOverdueBooks(){
-        Connection connection = null;
         Statement query = null;
         ResultSet books = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             books = query.executeQuery(
-                    "SELECT * FROM info5051_books.book\n" +
-                        "INNER JOIN info5051_books.book_loan\n" +
-                        "INNER JOIN info5051_books.borrower\n" +
+                    "SELECT * FROM info5051_books.book " +
+                        "INNER JOIN info5051_books.book_loan " +
+                        "INNER JOIN info5051_books.borrower " +
                         "WHERE CURDATE() > info5051_books.book_loan.date_due AND info5051_books.book_loan.date_returned IS NULL;"
             );
 
@@ -448,8 +429,6 @@ public class LibrarySystemModel
                 books.close();
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return theBooks;
         }catch (Exception ex){
@@ -462,11 +441,9 @@ public class LibrarySystemModel
     }
 
     public boolean addNewUser(String first_name, String last_name, String email){
-        Connection connection = null;
         Statement query = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
             query.executeUpdate(
                     "INSERT INTO BORROWER (first_name, last_name, email) " +
@@ -475,8 +452,6 @@ public class LibrarySystemModel
 
             if(query != null)
                 query.close();
-            if(connection != null)
-                connection.close();
 
             return true;
         }catch (Exception ex){
@@ -488,13 +463,11 @@ public class LibrarySystemModel
     }
 
     public boolean addNewBook(String title, String isbn, int edition, String subject, ArrayList<String> Authors){
-        Connection connection = null;
         Statement query = null;
         ResultSet authors = null;
         ResultSet book = null;
 
         try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
             query = connection.createStatement();
             query.executeUpdate(
                     "INSERT INTO BOOK (title, isbn, edition_number, subject, available) " +
@@ -536,8 +509,6 @@ public class LibrarySystemModel
                     book.close();
                 if (query != null)
                     query.close();
-                if (connection != null)
-                    connection.close();
 
                 return true;
             }else{
@@ -545,30 +516,6 @@ public class LibrarySystemModel
             }
         }catch (Exception ex){
             throwError(ex.getMessage());
-            System.out.println("Exception: " + ex.getMessage());
-            ex.printStackTrace();
-
-            return false;
-        }
-    }
-
-    public boolean returnABook(int BookID){
-        Connection connection = null;
-        Statement query = null;
-
-        try{
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
-            query = connection.createStatement();
-            query.executeUpdate("UPDATE book_loan SET date_returned = CURDATE() WHERE Book_BookID = " + BookID + "");
-            query.executeUpdate("UPDATE book SET available = true WHERE BookID = " + BookID + "");
-
-            if(query != null)
-                query.close();
-            if(connection != null)
-                connection.close();
-
-            return true;
-        }catch (Exception ex){
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
 
