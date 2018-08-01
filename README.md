@@ -4,10 +4,14 @@ Library System was programmed during the week of July 29th, 2018 by Evan Burgess
 
 # Requirements
 A MySql server
+
 This SQL Script - https://mega.nz/#!ZMAgRKjT!TtBEW2I7jdErLZpykpq-cpRyWOIo8mQdG5IzGUFts4c
+
 Java Compiler
 
 # Setup
 1. Clone the repo
+
 2. Run the script on your MySQL server (running it again will set the database back to it's original state)
+
 3. Compile and Run the app
