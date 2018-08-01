@@ -29,6 +29,7 @@ public class LibrarySystemModel
     private DefaultTableModel loans;
     private DefaultTableModel users;
     private DefaultComboBoxModel<String> authors;
+    private DefaultTableModel overdueBooks;
     private Connection connection;
 
     public LibrarySystemModel(){
@@ -52,6 +53,12 @@ public class LibrarySystemModel
     public DefaultTableModel getUsers(){
         getAllBorrowers();
         return users;
+    }
+    
+    public DefaultTableModel getOverdue()
+    {
+    	getOverdueBooks();
+    	return overdueBooks;
     }
 
     public DefaultTableModel getLoans(){
@@ -411,7 +418,7 @@ public class LibrarySystemModel
         }
     }
 
-    public DefaultTableModel getOverdueBooks(){
+    private void getOverdueBooks(){
         Statement query = null;
         ResultSet books = null;
 
@@ -420,20 +427,17 @@ public class LibrarySystemModel
                     "SELECT BookID, Title, ISBN, Edition_Number, Subject, Comment, First_Name, Last_Name FROM book bks INNER JOIN book_loan bkln ON bks.BookID = bkln.Book_BookID INNER JOIN borrower brwr ON bkln.Borrower_Borrower_ID = brwr.Borrower_ID WHERE Available = 0 AND CURDATE() > date_due ORDER BY Last_Name"
             );
 
-            DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+            overdueBooks = returnTableModelFromResultSet(books);
 
             if(books != null)
                 books.close();
             if(query != null)
                 query.close();
 
-            return theBooks;
         }catch (Exception ex){
             throwError(ex.getMessage());
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
-
-            return null;
         }
     }
 

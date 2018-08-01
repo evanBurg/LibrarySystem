@@ -70,6 +70,17 @@ public class LibrarySystemController
             tcm.removeColumn(tcm.getColumn(0));
         }
     }
+    
+    private void loadOverdue(){
+        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Comment", "First", "Last"};
+        DefaultTableModel loans = theModel.getOverdue();
+        loans.setColumnIdentifiers(loanColNames);
+        if(loans.getRowCount() > 0) {
+            theView.retrievalTable.setModel(loans);
+            TableColumnModel tcm = theView.retrievalTable.getColumnModel();
+            tcm.removeColumn(tcm.getColumn(0));
+        }
+    }
 
     public void loadSubject(){
         theView.subjectComboBox.setModel(theModel.getAllSubjects());
@@ -170,12 +181,20 @@ public class LibrarySystemController
                 int selectedBook = -1;
                 selectedBook = theView.loanDialog.booksToChooseFrom.getSelectedIndex();
                 int selectedBorrower = -1;
-                selectedBorrower = theView.loanDialog.borrowersIds.getSelectedIndex();
+                selectedBorrower = theView.loanDialog.borrowers.getSelectedIndex();
                 selectedBorrower = Integer.parseInt(theView.loanDialog.borrowersIds.getItemAt(selectedBorrower));
                 theModel.checkABookInorOut(theView.loanDialog.isLoaning, theView.loanDialog.ISBNs.getItemAt(selectedBook), selectedBorrower);
                 searchBooks();
-                loadLoans();
                 theView.loanDialog.setVisible(false);
+            }
+            if(e.getSource().equals(theView.retrievalBooksButton)) {
+            	loadBooks();
+            }
+            if(e.getSource().equals(theView.retrievalBooksOnLoanButton)) {
+            	loadLoans();
+            }
+            if(e.getSource().equals(theView.retrievalOverdueButton)) {
+            	loadOverdue();
             }
         }
 
