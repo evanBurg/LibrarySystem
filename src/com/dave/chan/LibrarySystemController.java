@@ -196,6 +196,10 @@ public class LibrarySystemController
             if(e.getSource().equals(theView.retrievalOverdueButton)) {
             	loadOverdue();
             }
+            if(e.getSource().equals(theView.addBookBtn)) {
+            	theView.addBookDialog.setVisible(true);
+            }
+            
         }
 
     }//end inner class
