@@ -288,9 +288,7 @@ public class LibrarySystemView extends JFrame
         searchInfoLabel = new JLabel("Search By:");
         authorRadioButton = new JRadioButton("Author");
         subjectRadioButton = new JRadioButton("Subject");
-        
-        
-        
+          
         //searchGroup = new ButtonGroup();
         //searchGroup.add(subjectRadioButton);
         //searchGroup.add(authorRadioButton);
