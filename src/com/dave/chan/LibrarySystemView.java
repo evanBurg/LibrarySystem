@@ -119,12 +119,12 @@ public class LibrarySystemView extends JFrame
         //boilerplate
         super("Library System");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-        this.setSize(600,550);
+       // this.setLayout(new BorderLayout() );//ANONYMOUS layout object
+        this.setSize(700,550);
         this.setLocationRelativeTo(null);
 
-        basePanel = new JPanel(new FlowLayout());
-        this.add(basePanel, BorderLayout.CENTER);
+        basePanel = new JPanel(new BorderLayout());
+        this.add(basePanel);
 
         libraryTabbedPane = new JTabbedPane();
         basePanel.add(libraryTabbedPane);
@@ -153,7 +153,6 @@ public class LibrarySystemView extends JFrame
       
         libraryTabbedPane.add("Users", usersPanel);
 
-
         //Books Section
         booksPanel = new JPanel(new BorderLayout());
         
@@ -164,8 +163,7 @@ public class LibrarySystemView extends JFrame
         booksTitlePanel.add(booksTitleLabel);
         
         booksPanel.add(booksTitlePanel, BorderLayout.NORTH);
-        
-        
+
         booksButtonPanel = new JPanel();
         BoxLayout booksBoxLayout = new BoxLayout(booksButtonPanel, BoxLayout.Y_AXIS);
         booksButtonPanel.setLayout(booksBoxLayout);
