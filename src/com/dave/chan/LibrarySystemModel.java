@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -299,6 +300,43 @@ public class LibrarySystemModel
 
             return null;
         }
+    }
+
+    public boolean checkABookInorOut(boolean isCheckingOut, String ISBN, int BorrowerId){
+        Connection connection = null;
+        Statement query = null;
+        ResultSet bookID = null;
+
+        try{
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info5051_books?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=EST5EDT","root","password");
+            query = connection.createStatement();
+            query.executeUpdate("UPDATE Book SET Available = 0 WHERE ISBN = '"+ ISBN +"'");
+            bookID = query.executeQuery("SELECT BookID FROM Book WHERE ISBN = '"+ ISBN +"'");
+            int BookID = 0;
+            if(bookID.next())
+                BookID = bookID.getInt(1);
+
+            if(!isCheckingOut) {
+                if (BookID != 0)
+                    query.executeUpdate("UPDATE book_loan SET date_returned CURDATE() WHERE Book_BookID =" + BookID);
+            }else{
+                query.executeUpdate("INSERT INTO book_loan(Book_BookID, Borrower_Borrower_ID, date_out, date_due) VALUES("+BookID+", "+ BorrowerId +", CURDATE(), DATE_ADD(CURDATE(), INTERVAL 14 DAY))");
+            }
+
+            if(bookID != null)
+                bookID.close();
+            if(query != null)
+                query.close();
+            if(connection != null)
+                connection.close();
+
+            return true;
+        }catch (Exception ex){
+            throwError(ex.getMessage());
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     public DefaultTableModel getAllBorrowers(){

@@ -16,6 +16,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
+import javax.swing.table.TableModel;
 
 public class LibrarySystemView extends JFrame
 {
@@ -48,32 +49,46 @@ public class LibrarySystemView extends JFrame
 	
 	AddUserDialog addUserDialog;
 	
-	NewLoanDialog newLoanDialog;
+	LoanDialog loanDialog;
 	
-	public class NewLoanDialog extends JFrame{
-	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
-        JTextArea addUserFirstName, addUserLastName, addUserEmail;
-        public NewLoanDialog(){
+	public class LoanDialog extends JFrame{
+	    JLabel bookLabel;
+	    JComboBox<String> booksToChooseFrom, ISBNs, borrowers, borrowersIds;
+	    boolean isLoaning;
+        JButton acceptButton;
+        public LoanDialog(){
             super("Library System");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            this.setLayout(new FlowLayout() );//ANONYMOUS layout object
+            this.setLayout(new GridLayout(4,1, 3, 3) );//ANONYMOUS layout object
             this.setSize(500,200);
             this.setLocationRelativeTo(null);
 
-            addUserFirstNameLabel = new JLabel("First Name:");
-            addUserLastNameLabel = new JLabel("Last Name:");
-            addUserEmailLabel = new JLabel("Email:");
+            this.isLoaning = isLoaning;
+            bookLabel = new JLabel("Choose a Book");
+            booksToChooseFrom = new JComboBox<String>();
+            acceptButton = new JButton();
+            borrowers = new JComboBox<String>();
+            borrowersIds = new JComboBox<String>();
+            ISBNs = new JComboBox<String>();
 
-            addUserFirstName = new JTextArea(1, 7);
-            addUserLastName = new JTextArea(1, 7);
-            addUserEmail = new JTextArea(1, 7);
+            this.add(bookLabel);
+            this.add(booksToChooseFrom);
+            this.add(borrowers);
+            this.add(acceptButton);
+        }
 
-            this.add(addUserFirstNameLabel);
-            this.add(addUserFirstName);
-            this.add(addUserLastNameLabel);
-            this.add(addUserLastName);
-            this.add(addUserEmailLabel);
-            this.add(addUserEmail);
+        public void openLoanDialog(boolean isLoaning, DefaultComboBoxModel<String> bookStrings, TableModel books, DefaultComboBoxModel<String> ISBNs, DefaultComboBoxModel<String> borrowers, DefaultComboBoxModel<String> borrowersIds){
+            this.isLoaning = isLoaning;
+            booksToChooseFrom.setModel(bookStrings);
+            this.ISBNs.setModel(ISBNs);
+            this.borrowers.setModel(borrowers);
+            this.borrowersIds.setModel(borrowersIds);
+            if(isLoaning) {
+                acceptButton.setText("Check Out this Book");
+            }else{
+                acceptButton.setText("Check In this Book");
+            }
+            this.setVisible(true);
         }
     }
 	
@@ -244,7 +259,7 @@ public class LibrarySystemView extends JFrame
         
         loansButtonPanel = new JPanel();
         loansCheckOutBtn = new JButton("Check Out Book");
-        newLoanDialog = new NewLoanDialog();
+        loanDialog = new LoanDialog();
         loansCheckInBtn = new JButton("Check In Book");
         loansButtonPanel.add(loansCheckOutBtn);
         loansButtonPanel.add(loansCheckInBtn);
@@ -358,8 +373,7 @@ public class LibrarySystemView extends JFrame
         //Search Tab Button Listeners
         subjectComboBox.addActionListener(generalListener);
         authorComboBox.addActionListener(generalListener);
-        //subjectRadioButton.addActionListener(generalListener);
-        //authorRadioButton.addActionListener(generalListener);
+        loanDialog.acceptButton.addActionListener(generalListener);
 	}
 
 }//end class
