@@ -18,6 +18,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 
 public class LibrarySystemController
@@ -201,6 +202,37 @@ public class LibrarySystemController
                 ((DefaultComboBoxModel<String>) authors).removeElementAt(0);
                 theView.addBookDialog.addBookAuthorList.setModel(authors);
             	theView.addBookDialog.setVisible(true);
+            }
+            if(e.getSource().equals(theView.addBookDialog.addAuthorBtn)) {
+            	if(theView.addBookDialog.addAuthorTxtFld.getText() != "Dickens, Charles" || theView.addBookDialog.addAuthorTxtFld.getText().isEmpty())
+            	{
+            		String author = theView.addBookDialog.addAuthorTxtFld.getText();
+                	String split[] = author.split("\\s*,\\s*");
+                    String first = split[1];
+                    String last = split[0];
+                    
+                    theModel.addNewAuthor(first, last);
+                    
+                    ComboBoxModel<String> authors = theModel.getAuthors();
+                    ((DefaultComboBoxModel<String>) authors).removeElementAt(0);
+                    theView.addBookDialog.addBookAuthorList.setModel(authors);
+                    
+            	}
+            }
+            if(e.getSource().equals(theView.addBookDialog.addBookButton))
+            {
+            	String title = theView.addBookDialog.addBookTitle.getText();
+            	String isbn = theView.addBookDialog.addBookISBN.getText();
+            	int edition = Integer.parseInt(theView.addBookDialog.addBookEdition.getText());
+            	String subject = theView.addBookDialog.addBookSubject.getText();
+            	List<String> authors = theView.addBookDialog.addBookAuthorList.getSelectedValuesList();
+            	
+            	theModel.addNewBook(title,  isbn, edition, subject, authors);
+            	loadBooks();
+            	loadAuthors();
+            	loadSubject();
+            	
+            	theView.addBookDialog.setVisible(false);
             }
             
         }

@@ -208,7 +208,7 @@ public class LibrarySystemView extends JFrame
             super("Add Book");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-            this.setSize(250,370);
+            this.setSize(250,350);
             this.setLocationRelativeTo(null);
 
             basePanel = new JPanel(new BorderLayout());
@@ -222,14 +222,11 @@ public class LibrarySystemView extends JFrame
             addBookEditionLabel.setHorizontalAlignment(JLabel.CENTER);
             addBookISBNLabel.setHorizontalAlignment(JLabel.CENTER);
             
-    
-
             addBookAuthorList = new JList<String>();
             scrollPane = new JScrollPane();
             addBookAuthorList.setVisibleRowCount(5);
             scrollPane.setViewportView(addBookAuthorList);
-
-            
+        
             addBookTitle = new JTextField();
             addBookSubject = new JTextField();
             addBookEdition = new JTextField();
