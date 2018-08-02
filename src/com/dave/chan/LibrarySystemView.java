@@ -198,14 +198,17 @@ public class LibrarySystemView extends JFrame
 	public class AddBookDialog extends JFrame{
 	    JLabel addBookTitleLabel, addBookSubjectLabel, addBookEditionLabel, addBookAuthorLabel;
         JTextField addBookTitle, addBookSubject, assBookEdition;
-        JPanel inputPanel, buttonPanel;
-        JComboBox addBookAuthorCombo;
+        JPanel basePanel, inputPanel, authorPanel, buttonPanel;
+        JList<String> addBookAuthorList;
+        JButton addBookButton;
         public AddBookDialog(){
             super("Add Book");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-            this.setSize(250,180);
+            this.setSize(250,300);
             this.setLocationRelativeTo(null);
+
+            basePanel = new JPanel(new BorderLayout());
 
             addBookTitleLabel = new JLabel("Title:");
             addBookSubjectLabel = new JLabel("Subject:");
@@ -216,7 +219,7 @@ public class LibrarySystemView extends JFrame
             
             addBookAuthorLabel = new JLabel("Author(s)");
             addBookAuthorLabel.setHorizontalAlignment(JLabel.CENTER);
-            addBookAuthorCombo = new JComboBox();
+            addBookAuthorList = new JList<String>();
 
             addBookTitle = new JTextField();
             addBookSubject = new JTextField();
@@ -225,7 +228,7 @@ public class LibrarySystemView extends JFrame
             addUserDialogButton = new JButton("Add Author");
 
             inputPanel = new JPanel(new GridLayout(4, 2, 30, 10));
-            this.add(inputPanel, BorderLayout.CENTER);
+            basePanel.add(inputPanel, BorderLayout.CENTER);
 
             inputPanel.add(addBookTitleLabel);
             inputPanel.add(addBookTitle);
@@ -234,10 +237,17 @@ public class LibrarySystemView extends JFrame
             inputPanel.add(addBookEditionLabel);
             inputPanel.add(assBookEdition);
             inputPanel.add(addBookAuthorLabel);
-            inputPanel.add(addBookAuthorCombo);
             
             buttonPanel = new JPanel();
+            addBookButton = new JButton("Add Book");
             buttonPanel.add(addUserDialogButton);
+            buttonPanel.add(addBookButton);
+
+            authorPanel = new JPanel(new BorderLayout());
+            authorPanel.add(addBookAuthorList, BorderLayout.CENTER);
+            basePanel.add(authorPanel, BorderLayout.SOUTH);
+
+            this.add(basePanel, BorderLayout.CENTER);
             this.add(buttonPanel, BorderLayout.SOUTH);
         }
     }
