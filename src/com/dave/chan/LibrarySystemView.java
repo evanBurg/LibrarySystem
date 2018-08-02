@@ -224,8 +224,9 @@ public class LibrarySystemView extends JFrame
             
             addBookAuthorList = new JList<String>();
             scrollPane = new JScrollPane();
+            addBookAuthorList.setVisibleRowCount(5);
             scrollPane.setViewportView(addBookAuthorList);
-            
+
             
             addBookTitle = new JTextField();
             addBookSubject = new JTextField();
