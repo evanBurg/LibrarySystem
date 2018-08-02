@@ -443,15 +443,14 @@ public class LibrarySystemModel
         }
     }
 
-    public boolean addNewUser(String first_name, String last_name, String email){
-        Statement query = null;
+    public boolean addNewAuthor(String first_name, String last_name){
+        PreparedStatement query = null;
 
         try{
-            query = connection.createStatement();
-            query.executeUpdate(
-                    "INSERT INTO BORROWER (first_name, last_name, email) " +
-                        "VALUES ('" + first_name + "', '" + last_name + "', '"+ email +"')"
-            );
+            query = connection.prepareStatement("INSERT INTO Author (first_name, last_name) VALUES (?, ?)");
+            query.setString(1, first_name);
+            query.setString(2, last_name);
+            query.executeUpdate();
 
             if(query != null)
                 query.close();
