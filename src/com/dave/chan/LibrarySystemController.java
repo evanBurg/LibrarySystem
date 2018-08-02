@@ -61,7 +61,7 @@ public class LibrarySystemController
     }
 
     private void loadLoans(){
-        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Comment", "First", "Last"};
+        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Comment", "Date Due", "First", "Last"};
         DefaultTableModel loans = theModel.getLoans();
         loans.setColumnIdentifiers(loanColNames);
         if(loans.getRowCount() > 0) {
@@ -72,7 +72,7 @@ public class LibrarySystemController
     }
     
     private void loadOverdue(){
-        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Comment", "First", "Last"};
+        String[] loanColNames = {"ID", "Title", "ISBN", "Edition", "Subject", "Comment", "Date Due", "First", "Last"};
         DefaultTableModel loans = theModel.getOverdue();
         loans.setColumnIdentifiers(loanColNames);
         if(loans.getRowCount() > 0) {
@@ -197,6 +197,9 @@ public class LibrarySystemController
             	loadOverdue();
             }
             if(e.getSource().equals(theView.addBookBtn)) {
+                ComboBoxModel<String> authors = theModel.getAuthors();
+                ((DefaultComboBoxModel<String>) authors).removeElementAt(0);
+                theView.addBookDialog.addBookAuthorList.setModel(authors);
             	theView.addBookDialog.setVisible(true);
             }
             
