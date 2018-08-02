@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.*;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -442,15 +443,14 @@ public class LibrarySystemModel
         }
     }
 
-    public boolean addNewUser(String first_name, String last_name, String email){
-        Statement query = null;
+    public boolean addNewAuthor(String first_name, String last_name){
+        PreparedStatement query = null;
 
         try{
-            query = connection.createStatement();
-            query.executeUpdate(
-                    "INSERT INTO BORROWER (first_name, last_name, email) " +
-                        "VALUES ('" + first_name + "', '" + last_name + "', '"+ email +"')"
-            );
+            query = connection.prepareStatement("INSERT INTO Author (first_name, last_name) VALUES (?, ?)");
+            query.setString(1, first_name);
+            query.setString(2, last_name);
+            query.executeUpdate();
 
             if(query != null)
                 query.close();
@@ -464,45 +464,44 @@ public class LibrarySystemModel
         }
     }
 
-    public boolean addNewBook(String title, String isbn, int edition, String subject, ArrayList<String> Authors){
-        Statement query = null;
+    public boolean addNewBook(String title, String isbn, int edition, String subject, List<String> Authors){
+        PreparedStatement query = null;
         ResultSet authors = null;
         ResultSet book = null;
 
         try{
-            query = connection.createStatement();
-            query.executeUpdate(
-                    "INSERT INTO BOOK (title, isbn, edition_number, subject, available) " +
-                            "VALUES ('" + title + "', '" + isbn + "', "+ edition +", " + subject + ", true)"
-            );
+            query = connection.prepareStatement("INSERT INTO BOOK (title, isbn, edition_number, subject, available) VALUES (?, ?, ?, ?, true)");
+            query.setString(1, title);
+            query.setString(2, isbn);
+            query.setInt(3, edition);
+            query.setString(4, subject);
+            query.executeUpdate();
 
-            book = query.executeQuery("SELECT BookID * FROM Books WHERE title ='" + title + "' AND ISBN ='" + isbn + "'");
+            query = connection.prepareStatement("SELECT BookID FROM Book WHERE title = ? AND ISBN = ?");
+            query.setString(1, title);
+            query.setInt(2, Integer.parseInt(isbn));
+            book = query.executeQuery();
             if(book.next()) {
-                for (String Author : Authors) {
+                for (int i = 0; i < Authors.size(); i++) {
+                    String Author = Authors.get(i);
+                    String split[] = Author.split("\\s*,\\s*");
+                    String first = split[1];
+                    String last = split[0];
 
-                    String split[] = Author.split(",");
-                    String first = split[0];
-                    String last = split[1];
-
-                    authors = query.executeQuery("SELECT * FROM author WHERE first_name ='" + first + "' AND last_name = '" + last + "'");
+                    //Get the authors id
+                    query = connection.prepareStatement("SELECT AuthorID FROM author WHERE first_name = ? AND last_name = ?");
+                    query.setString(1, first);
+                    query.setString(2, last);
+                    authors = query.executeQuery();
 
                     //If .next() returns false, there are no existing authors with that name
-                    if (!authors.next())
-                        query.executeUpdate(
-                                "INSERT INTO author (first_name, last_name) " +
-                                        "VALUES ('" + first + "', '" + last + "')"
-                        );
-
-                    //Get the authors ID
-                    authors = query.executeQuery("SELECT AuthorID FROM author WHERE first_name ='" + first + "' AND last_name = '" + last + "'");
-
-                    if(authors.next()) {
-                        query.executeUpdate(
-                                "INSERT INTO BOOK_AUTHOR (Book_BookID, Author_AuthorID) " +
-                                        "VALUES (" + book.getString("BookID") + ", " + authors.getString("AuthorID") + ")"
-                        );
-                    }else{
-                        return false;
+                    if (!authors.next()) {
+                        throwError("Could not find specified author: " + last + ", " + first);
+                    }else {
+                        query = connection.prepareStatement("INSERT INTO BOOK_AUTHOR (Book_BookID, Author_AuthorID) VALUES (?, ?)");
+                        query.setInt(1, book.getInt("BookID"));
+                        query.setInt(2, authors.getInt("AuthorID"));
+                        query.executeUpdate();
                     }
                 }
                 if(authors != null)
