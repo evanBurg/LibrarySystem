@@ -199,15 +199,16 @@ public class LibrarySystemView extends JFrame
 	
 	public class AddBookDialog extends JFrame{
 	    JLabel addBookTitleLabel, addBookSubjectLabel, addBookEditionLabel, addBookAuthorLabel, addBookISBNLabel;
-        JTextField addBookTitle, addBookSubject, addBookEdition, addBookISBN;
-        JPanel basePanel, inputPanel, authorPanel, buttonPanel;
+        JTextField addBookTitle, addBookSubject, addBookEdition, addBookISBN, addAuthorTxtFld;
+        JPanel basePanel, inputPanel, authorPanel, buttonPanel, subPanel;
         JList<String> addBookAuthorList;
+        JScrollPane scrollPane;
         JButton addBookButton, addAuthorBtn;
         public AddBookDialog(){
             super("Add Book");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-            this.setSize(250,335);
+            this.setSize(250,370);
             this.setLocationRelativeTo(null);
 
             basePanel = new JPanel(new BorderLayout());
@@ -220,15 +221,43 @@ public class LibrarySystemView extends JFrame
             addBookSubjectLabel.setHorizontalAlignment(JLabel.CENTER);
             addBookEditionLabel.setHorizontalAlignment(JLabel.CENTER);
             addBookISBNLabel.setHorizontalAlignment(JLabel.CENTER);
-         
-            addBookAuthorLabel = new JLabel("Author(s)");
-            addBookAuthorLabel.setHorizontalAlignment(JLabel.LEFT);
-            addBookAuthorList = new JList<String>();
+            
+    
 
+            addBookAuthorList = new JList<String>();
+            scrollPane = new JScrollPane();
+            scrollPane.setViewportView(addBookAuthorList);
+            
+            
             addBookTitle = new JTextField();
             addBookSubject = new JTextField();
             addBookEdition = new JTextField();
             addBookISBN = new JTextField();
+            addAuthorTxtFld = new JTextField();
+            
+        	Font italicFont = new Font("Sans-Serif",Font.ITALIC, 11);
+        	Font stdFont = new Font("Sans-Serif", Font.PLAIN, 11);
+            addAuthorTxtFld.setFont(italicFont);
+          	addAuthorTxtFld.setForeground(Color.GRAY);
+           	addAuthorTxtFld.setText("Dickens, Charles");
+            addAuthorTxtFld.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if (addAuthorTxtFld.getText().equals("Dickens, Charles")) {
+                    	addAuthorTxtFld.setText("");
+                    	addAuthorTxtFld.setFont(stdFont);
+                    	addAuthorTxtFld.setForeground(Color.BLACK);
+                    }
+                }
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if (addAuthorTxtFld.getText().isEmpty()) {
+                    	addAuthorTxtFld.setForeground(Color.GRAY);
+                    	addAuthorTxtFld.setFont(italicFont);
+                    	addAuthorTxtFld.setText("Dickens, Charles");
+                    }
+                }
+            });
 
             addAuthorBtn = new JButton("Add Author");
 
@@ -243,15 +272,20 @@ public class LibrarySystemView extends JFrame
             inputPanel.add(addBookISBN);
             inputPanel.add(addBookEditionLabel);
             inputPanel.add(addBookEdition);
-            inputPanel.add(addBookAuthorLabel);
             
-            buttonPanel = new JPanel();
+            buttonPanel = new JPanel(new GridLayout(2,2, 5,5));
             addBookButton = new JButton("Add Book");
             buttonPanel.add(addAuthorBtn);
+            buttonPanel.add(addAuthorTxtFld);
             buttonPanel.add(addBookButton);
 
             authorPanel = new JPanel(new BorderLayout());
-            authorPanel.add(addBookAuthorList, BorderLayout.CENTER);
+            subPanel = new JPanel();
+            subPanel.add(scrollPane);
+            authorPanel.add(subPanel, BorderLayout.CENTER);
+            addBookAuthorLabel = new JLabel("Author(s)");
+            addBookAuthorLabel.setHorizontalAlignment(JLabel.CENTER);
+            authorPanel.add(addBookAuthorLabel, BorderLayout.NORTH);
             basePanel.add(authorPanel, BorderLayout.SOUTH);
 
             this.add(basePanel, BorderLayout.CENTER);
@@ -277,7 +311,6 @@ public class LibrarySystemView extends JFrame
             addUserFirstNameLabel.setHorizontalAlignment(JLabel.CENTER);
             addUserLastNameLabel.setHorizontalAlignment(JLabel.CENTER);
             addUserEmailLabel.setHorizontalAlignment(JLabel.CENTER);
-
 
             addUserFirstName = new JTextField();
             addUserLastName = new JTextField();
