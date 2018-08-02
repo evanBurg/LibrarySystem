@@ -479,7 +479,7 @@ public class LibrarySystemModel
 
             query = connection.prepareStatement("SELECT BookID FROM Book WHERE title = ? AND ISBN = ?");
             query.setString(1, title);
-            query.setInt(2, Integer.parseInt(isbn));
+            query.setString(2, isbn);
             book = query.executeQuery();
             if(book.next()) {
                 for (int i = 0; i < Authors.size(); i++) {
