@@ -140,7 +140,7 @@ public class LibrarySystemController
             if(e.getSource().equals(theView.usersNewButton)){
                 theView.addUserDialog.setVisible(true);
             }
-            if(e.getSource().equals(theView.addUserDialogButton)){
+            if(e.getSource().equals(theView.addUserDialog.addUserDialogButton)){
                 theView.addUserDialog.setVisible(false);
                 addNewUser(theView.addUserDialog.addUserFirstName.getText(), theView.addUserDialog.addUserLastName.getText(), theView.addUserDialog.addUserEmail.getText());
                 loadUsers();

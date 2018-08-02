@@ -33,7 +33,7 @@ public class LibrarySystemView extends JFrame
 	JScrollPane userTableScrollPane, retrievalTableScrollPane, searchTableScrollPane;
 	
 	JButton usersSaveButton, usersUpdateButton, usersNewButton, 
-			searchCheckOutBtn, searchCheckInBtn, addUserDialogButton, retrievalOverdueButton,
+			searchCheckOutBtn, searchCheckInBtn, retrievalOverdueButton,
 			retrievalBooksOnLoanButton, retrievalBooksButton, addBookBtn;
 	
 	JLabel searchInfoLabel;
@@ -49,7 +49,7 @@ public class LibrarySystemView extends JFrame
         //boilerplate
         super("Library System");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       // this.setLayout(new BorderLayout() );//ANONYMOUS layout object
+        // this.setLayout(new BorderLayout() );//ANONYMOUS layout object
         this.setSize(700,550);
         this.setLocationRelativeTo(null);
 
@@ -179,13 +179,15 @@ public class LibrarySystemView extends JFrame
 		usersSaveButton.addActionListener(generalListener);
 		usersUpdateButton.addActionListener(generalListener);
 		usersNewButton.addActionListener(generalListener);
-		addUserDialogButton.addActionListener(generalListener);
+		addUserDialog.addUserDialogButton.addActionListener(generalListener);
 	    
         //Index Tab Button Listeners
         retrievalBooksButton.addActionListener(generalListener);
         retrievalBooksOnLoanButton.addActionListener(generalListener);
         retrievalOverdueButton.addActionListener(generalListener);
         addBookBtn.addActionListener(generalListener);
+        addBookDialog.addAuthorBtn.addActionListener(generalListener);
+        addBookDialog.addBookButton.addActionListener(generalListener);
         
         //Search Tab Button Listeners
         subjectComboBox.addActionListener(generalListener);
@@ -196,16 +198,16 @@ public class LibrarySystemView extends JFrame
 	}
 	
 	public class AddBookDialog extends JFrame{
-	    JLabel addBookTitleLabel, addBookSubjectLabel, addBookEditionLabel, addBookAuthorLabel;
-        JTextField addBookTitle, addBookSubject, assBookEdition;
+	    JLabel addBookTitleLabel, addBookSubjectLabel, addBookEditionLabel, addBookAuthorLabel, addBookISBNLabel;
+        JTextField addBookTitle, addBookSubject, addBookEdition, addBookISBN;
         JPanel basePanel, inputPanel, authorPanel, buttonPanel;
         JList<String> addBookAuthorList;
-        JButton addBookButton;
+        JButton addBookButton, addAuthorBtn;
         public AddBookDialog(){
             super("Add Book");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new BorderLayout() );//ANONYMOUS layout object
-            this.setSize(250,300);
+            this.setSize(250,335);
             this.setLocationRelativeTo(null);
 
             basePanel = new JPanel(new BorderLayout());
@@ -213,34 +215,39 @@ public class LibrarySystemView extends JFrame
             addBookTitleLabel = new JLabel("Title:");
             addBookSubjectLabel = new JLabel("Subject:");
             addBookEditionLabel = new JLabel("Edition:");
+            addBookISBNLabel = new JLabel("ISBN:");
             addBookTitleLabel.setHorizontalAlignment(JLabel.CENTER);
             addBookSubjectLabel.setHorizontalAlignment(JLabel.CENTER);
             addBookEditionLabel.setHorizontalAlignment(JLabel.CENTER);
-            
+            addBookISBNLabel.setHorizontalAlignment(JLabel.CENTER);
+         
             addBookAuthorLabel = new JLabel("Author(s)");
-            addBookAuthorLabel.setHorizontalAlignment(JLabel.CENTER);
+            addBookAuthorLabel.setHorizontalAlignment(JLabel.LEFT);
             addBookAuthorList = new JList<String>();
 
             addBookTitle = new JTextField();
             addBookSubject = new JTextField();
-            assBookEdition = new JTextField();
+            addBookEdition = new JTextField();
+            addBookISBN = new JTextField();
 
-            addUserDialogButton = new JButton("Add Author");
+            addAuthorBtn = new JButton("Add Author");
 
-            inputPanel = new JPanel(new GridLayout(4, 2, 30, 10));
+            inputPanel = new JPanel(new GridLayout(5, 2, 30, 10));
             basePanel.add(inputPanel, BorderLayout.CENTER);
 
             inputPanel.add(addBookTitleLabel);
             inputPanel.add(addBookTitle);
             inputPanel.add(addBookSubjectLabel);
             inputPanel.add(addBookSubject);
+            inputPanel.add(addBookISBNLabel);
+            inputPanel.add(addBookISBN);
             inputPanel.add(addBookEditionLabel);
-            inputPanel.add(assBookEdition);
+            inputPanel.add(addBookEdition);
             inputPanel.add(addBookAuthorLabel);
             
             buttonPanel = new JPanel();
             addBookButton = new JButton("Add Book");
-            buttonPanel.add(addUserDialogButton);
+            buttonPanel.add(addAuthorBtn);
             buttonPanel.add(addBookButton);
 
             authorPanel = new JPanel(new BorderLayout());
@@ -256,6 +263,7 @@ public class LibrarySystemView extends JFrame
 	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
         JTextField addUserFirstName, addUserLastName, addUserEmail;
         JPanel inputPanel, buttonPanel;
+        JButton addUserDialogButton;
         public AddUserDialog(){
             super("Add User");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
