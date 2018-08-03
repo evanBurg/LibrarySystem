@@ -94,7 +94,7 @@ public class LibrarySystemModel
         JFrame frame = new JFrame();
         String message = "";
         if(tabOpen == 0){
-            message = "On the Users tab you are able to see all the Borrowers in our system!\nIf you would like to update a borrowers information you may click 'Update User Info' and the edit the table as required, afterwards hit 'Save'.\nTo add a new Borrower, press the 'Add New User' button.";
+            message = "On the Users tab you are able to see all the Borrowers in our system!\nIf you would like to update a borrowers information you may click 'Unlock Table for Editing' and the edit the table as required, afterwards hit 'Save'.\nTo add a new Borrower, press the 'Add New User' button.";
         }else if(tabOpen == 1){
             message = "On the Index tab you are able to see our Book index, our Loan index, and our Overdue index.\nIf you would like to add a new book press the 'Add New Book' button.";
         }else if(tabOpen == 2){
@@ -104,6 +104,19 @@ public class LibrarySystemModel
                 message,
                 "Help",
                 JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private DefaultTableModel convertAvailabletoTrueorFalse(DefaultTableModel tableModel){
+        for (int i = 0; i < tableModel.getRowCount(); i++){
+            Object element = tableModel.getValueAt(i, 5);
+            if(element.toString().equals("1"))
+                element = "True";
+            else if(element.toString().equals("0"))
+                element = "False";
+            tableModel.setValueAt(element, i, 5);
+        }
+
+        return tableModel;
     }
 
     private DefaultTableModel returnTableModelFromResultSet(ResultSet rs) {
@@ -125,6 +138,7 @@ public class LibrarySystemModel
 
                 for (int i = 1; i <= numberOfColumns; i++) {
                     newRow.addElement(rs.getObject(i));
+
                 }
 
                 rows.addElement(newRow);
@@ -148,7 +162,8 @@ public class LibrarySystemModel
             booksrs = query.executeQuery("SELECT * FROM book");
 
             books = returnTableModelFromResultSet(booksrs);
-
+            books = convertAvailabletoTrueorFalse(books);
+            
             if(booksrs != null)
                 booksrs.close();
             if(query != null)
@@ -250,6 +265,7 @@ public class LibrarySystemModel
             books = query.executeQuery("SELECT * FROM book WHERE Subject = '" + subject + "'");
 
             DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+            theBooks = convertAvailabletoTrueorFalse(theBooks);
 
             if(books != null)
                 books.close();
@@ -281,6 +297,7 @@ public class LibrarySystemModel
             books = query.executeQuery();
 
             DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+            theBooks = convertAvailabletoTrueorFalse(theBooks);
 
             if(books != null)
                 books.close();
@@ -317,6 +334,8 @@ public class LibrarySystemModel
             books = query.executeQuery();
 
             DefaultTableModel theBooks = returnTableModelFromResultSet(books);
+            theBooks = convertAvailabletoTrueorFalse(theBooks);
+
 
             if(books != null)
                 books.close();
