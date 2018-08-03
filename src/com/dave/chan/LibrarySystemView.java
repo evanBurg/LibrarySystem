@@ -37,6 +37,11 @@ public class LibrarySystemView extends JFrame
 			retrievalBooksOnLoanButton, retrievalBooksButton, addBookBtn;
 	
 	JLabel searchInfoLabel;
+
+    JMenuBar menubar;
+    JMenu file;
+    JMenuItem exit, help;
+
 		
 	AddUserDialog addUserDialog;
 	
@@ -63,7 +68,17 @@ public class LibrarySystemView extends JFrame
         loadUserView();
         loadIndexView();
         loadSearchView();
-                      
+
+        //Create the menu bar
+        menubar = new JMenuBar();
+        file = new JMenu("File");
+        exit = new JMenuItem("Exit");
+        help = new JMenuItem("Help");
+        file.add(help);
+        file.add(exit);
+        menubar.add(file);
+        this.setJMenuBar(menubar);
+
         //display it
         this.setVisible(true);
 
@@ -195,6 +210,10 @@ public class LibrarySystemView extends JFrame
         loanDialog.acceptButton.addActionListener(generalListener);
         searchCheckInBtn.addActionListener(generalListener);
         searchCheckOutBtn.addActionListener(generalListener);
+
+        //Menubar listeners
+        exit.addActionListener(generalListener);
+        help.addActionListener(generalListener);
 	}
 	
 	public class AddBookDialog extends JFrame{

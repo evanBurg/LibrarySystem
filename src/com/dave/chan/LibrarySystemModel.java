@@ -90,6 +90,22 @@ public class LibrarySystemModel
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    public void displayHelp(int tabOpen){
+        JFrame frame = new JFrame();
+        String message = "";
+        if(tabOpen == 0){
+            message = "On the Users tab you are able to see all the Borrowers in our system!\nIf you would like to update a borrowers information you may click 'Update User Info' and the edit the table as required, afterwards hit 'Save'.\nTo add a new Borrower, press the 'Add New User' button.";
+        }else if(tabOpen == 1){
+            message = "On the Index tab you are able to see our Book index, our Loan index, and our Overdue index.\nIf you would like to add a new book press the 'Add New Book' button.";
+        }else if(tabOpen == 2){
+            message = "On the Search tab you are able to search our index for a book you might like.\nUse the Author and Subject drop downs to find something to your liking!\nAfter searching for a book you may check it in or out using the associate buttons.";
+        }
+        JOptionPane.showMessageDialog(frame,
+                message,
+                "Help",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
     private DefaultTableModel returnTableModelFromResultSet(ResultSet rs) {
         try {
             ResultSetMetaData metaData = rs.getMetaData();

@@ -18,6 +18,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 
@@ -233,6 +234,12 @@ public class LibrarySystemController
             	loadSubject();
             	
             	theView.addBookDialog.setVisible(false);
+            }
+            if(e.getSource().equals(theView.exit)){
+                theView.dispatchEvent(new WindowEvent(theView, WindowEvent.WINDOW_CLOSING));
+            }
+            if(e.getSource().equals(theView.help)){
+                theModel.displayHelp(theView.libraryTabbedPane.getSelectedIndex());
             }
             
         }
