@@ -9,6 +9,7 @@ package com.dave.chan;
  */
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -42,7 +43,8 @@ public class LibrarySystemView extends JFrame
     JMenu file;
     JMenuItem exit, help;
 
-		
+    Border greenBorder, emptyBorder;
+
 	AddUserDialog addUserDialog;
 	
 	AddBookDialog addBookDialog;
@@ -78,6 +80,10 @@ public class LibrarySystemView extends JFrame
         file.add(exit);
         menubar.add(file);
         this.setJMenuBar(menubar);
+
+        //Instantiate the borders
+        greenBorder = BorderFactory.createLineBorder(Color.green);
+        emptyBorder = BorderFactory.createEmptyBorder();
 
         //display it
         this.setVisible(true);
@@ -134,7 +140,8 @@ public class LibrarySystemView extends JFrame
      	usersButtonPanel = new JPanel(new GridLayout(1, 3, 3, 3));
      	
      	usersSaveButton = new JButton("Save");
-     	usersUpdateButton = new JButton("Update User Info");
+     	usersSaveButton.setEnabled(false);
+     	usersUpdateButton = new JButton("Unlock Table for Editing");
      	usersNewButton = new JButton("Add New User");
      	
      	usersButtonPanel.add(usersNewButton);

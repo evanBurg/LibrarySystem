@@ -134,9 +134,15 @@ public class LibrarySystemController
             if(e.getSource().equals(theView.usersSaveButton)){
                 updateUsers();
                 loadUsers();
+                theView.userTableScrollPane.setBorder(theView.emptyBorder);
+                theView.usersSaveButton.setEnabled(false);
+                theView.usersNewButton.setEnabled(true);
                 theView.usersTable.setEnabled(false);
             }
             if(e.getSource().equals(theView.usersUpdateButton)){
+                theView.userTableScrollPane.setBorder(theView.greenBorder);
+                theView.usersSaveButton.setEnabled(true);
+                theView.usersNewButton.setEnabled(false);
                 theView.usersTable.setEnabled(true);
             }
             if(e.getSource().equals(theView.usersNewButton)){
@@ -163,7 +169,7 @@ public class LibrarySystemController
                 }
                 if(e.getSource().equals(theView.searchCheckOutBtn)) {
                     for(int i = 0; i < books.getRowCount(); i++){
-                        if(books.getValueAt(i, 5).toString().equals("1")) {
+                        if(books.getValueAt(i, 5).toString().equals("True")) {
                             bookISBNs.addElement(books.getValueAt(i, 2).toString());
                             chosenBooks.addElement(books.getValueAt(i, 1).toString());
                         }
@@ -171,7 +177,7 @@ public class LibrarySystemController
                     theView.loanDialog.openLoanDialog(true, chosenBooks, theView.searchTable.getModel(), bookISBNs, borrowers, borrowersIds);
                 }else {
                     for(int i = 0; i < books.getRowCount(); i++){
-                        if(books.getValueAt(i, 5).toString().equals("0")) {
+                        if(books.getValueAt(i, 5).toString().equals("False")) {
                             bookISBNs.addElement(books.getValueAt(i, 2).toString());
                             chosenBooks.addElement(books.getValueAt(i, 1).toString());
                         }
