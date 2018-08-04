@@ -110,9 +110,9 @@ public class LibrarySystemModel
         for (int i = 0; i < tableModel.getRowCount(); i++){
             Object element = tableModel.getValueAt(i, 5);
             if(element.toString().equals("1"))
-                element = "True";
+                element = "Yes";
             else if(element.toString().equals("0"))
-                element = "False";
+                element = "No";
             tableModel.setValueAt(element, i, 5);
         }
 
