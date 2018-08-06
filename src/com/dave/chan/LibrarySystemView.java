@@ -56,7 +56,7 @@ public class LibrarySystemView extends JFrame
     {
         //boilerplate
         super("Library System");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         // this.setLayout(new BorderLayout() );//ANONYMOUS layout object
         this.setSize(700,550);
         this.setLocationRelativeTo(null);

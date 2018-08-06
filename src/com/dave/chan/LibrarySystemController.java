@@ -15,6 +15,7 @@ import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.List;
 
 
@@ -34,6 +35,15 @@ public class LibrarySystemController
         loadBooks();
         loadAuthors();
         loadSubject();
+
+        //Add a listener for when the window closes to close the database connection as well
+        theView.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                theModel.closeConnection();
+                System.exit(0);
+            }
+        });
         
         //append a listener object to our view components
         ActionListener listener = new BookListener();
@@ -380,5 +390,6 @@ public class LibrarySystemController
         }
 
     }//end inner class
+
 
 }//end class
