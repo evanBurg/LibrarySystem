@@ -4,7 +4,7 @@ package com.dave.chan;
  * Program Name: LibrarySystemView.java
  * Purpose: A GUI that the user will interact with in order to operate our library system. The View section of the
  * 			MVC architecture.
- * Coder: David Harrs & Evan Burgess
+ * Coder: David Harris & Evan Burgess
  * Date: July 30, 2018
  */
 
@@ -90,10 +90,13 @@ public class LibrarySystemView extends JFrame
 
     }//end constructor
     
+    //method for the index portion of our app
     private void loadIndexView()
     {
+    	//Gui setup
     	 retrievalPanel = new JPanel(new BorderLayout());
     	 
+    	 //we have a dialog object for one of the buttons when the user wants to add a new book
     	 addBookDialog = new AddBookDialog();
     	 
          hubBtnPanel = new JPanel(new BorderLayout());
@@ -117,6 +120,7 @@ public class LibrarySystemView extends JFrame
          hubBtnPanel.add(retrievalBtnPanel, BorderLayout.WEST);
          hubBtnPanel.add(addBookPanel, BorderLayout.EAST);
          
+         //jtable we use to display data from the various buttons
          retrievalTable = new JTable();
          retrievalTable.setEnabled(false);
          retrievalTableScrollPane = new JScrollPane(retrievalTable);
@@ -129,10 +133,12 @@ public class LibrarySystemView extends JFrame
     
     private void loadUserView()
     {
-    	
+    	//gui setup
     	usersPanel = new JPanel(new BorderLayout());
      	usersTable = new JTable();
      	usersTable.setEnabled(false);
+     	
+     	//to make jtable end editing and clear current selected rows when it loses focus
         usersTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
      	userTableScrollPane = new JScrollPane(usersTable);
      	usersPanel.add(userTableScrollPane, BorderLayout.CENTER);
@@ -156,6 +162,7 @@ public class LibrarySystemView extends JFrame
     
     private void loadSearchView()
     {
+    	//gui setup
     	searchPanel = new JPanel(new BorderLayout());
         searchButtonPanel = new JPanel(new GridLayout(1, 3, 3, 3));
         searchUIPanel = new JPanel();
@@ -174,6 +181,8 @@ public class LibrarySystemView extends JFrame
         authorComboBox = new JComboBox();
         subjectComboBox = new JComboBox();
         
+        //we dont allow the users to edit our combobox, and we give them default values so the user
+        //understands what the comboboxes are for
         authorComboBox.setPrototypeDisplayValue("Choose an Author");
         authorComboBox.setEditable(false);
         searchUIPanel.add(authorComboBox);
@@ -184,10 +193,12 @@ public class LibrarySystemView extends JFrame
         
         searchPanel.add(searchUIPanel, BorderLayout.NORTH);
         
+        //jtable to display db query results
         searchTable = new JTable();
         searchTable.setEnabled(false);
         searchTableScrollPane = new JScrollPane(searchTable);
         
+        //lets us scroll through the data if it exceeds the fram
         searchPanel.add(searchTableScrollPane, BorderLayout.CENTER);    
         
         libraryTabbedPane.addTab("Search", searchPanel);
@@ -223,20 +234,25 @@ public class LibrarySystemView extends JFrame
         help.addActionListener(generalListener);
 	}
 	
+	//this dialog window pops up when we use the add book jbutton
 	public class AddBookDialog extends JFrame{
+		//variable declarations in this class's scope
 	    JLabel addBookTitleLabel, addBookSubjectLabel, addBookEditionLabel, addBookAuthorLabel, addBookISBNLabel;
         JTextField addBookTitle, addBookSubject, addBookEdition, addBookISBN, addAuthorTxtFld;
         JPanel basePanel, inputPanel, authorPanel, buttonPanel, subPanel;
         JList<String> addBookAuthorList;
         JScrollPane scrollPane;
         JButton addBookButton, addAuthorBtn;
+        //constructor
         public AddBookDialog(){
+        	//boilerplate
             super("Add Book");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new BorderLayout() );//ANONYMOUS layout object
             this.setSize(250,350);
             this.setLocationRelativeTo(null);
-
+            
+            //gui
             basePanel = new JPanel(new BorderLayout());
 
             addBookTitleLabel = new JLabel("Title:");
@@ -248,8 +264,11 @@ public class LibrarySystemView extends JFrame
             addBookEditionLabel.setHorizontalAlignment(JLabel.CENTER);
             addBookISBNLabel.setHorizontalAlignment(JLabel.CENTER);
             
+            //we use a jlist to display our list of authors
             addBookAuthorList = new JList<String>();
             scrollPane = new JScrollPane();
+            //we set this visible count to 5 so the scroll pane comes into play and we can
+            //use it to see the rest of the list
             addBookAuthorList.setVisibleRowCount(5);
             scrollPane.setViewportView(addBookAuthorList);
         
@@ -259,6 +278,10 @@ public class LibrarySystemView extends JFrame
             addBookISBN = new JTextField();
             addAuthorTxtFld = new JTextField();
             
+            //this provides a filler text for our jtextfield
+            //the goal is to show the user the intended format for a new author entry
+            //and when they leave the scope of the textfield if there was no user input 
+            //it reappears, pretty lit.
         	Font italicFont = new Font("Sans-Serif",Font.ITALIC, 11);
         	Font stdFont = new Font("Sans-Serif", Font.PLAIN, 11);
             addAuthorTxtFld.setFont(italicFont);
@@ -283,6 +306,7 @@ public class LibrarySystemView extends JFrame
                 }
             });
 
+            //more gui
             addAuthorBtn = new JButton("Add Author");
 
             inputPanel = new JPanel(new GridLayout(5, 2, 30, 10));
@@ -317,18 +341,23 @@ public class LibrarySystemView extends JFrame
         }
     }
 	
+	//dialog window that pops up to provide a new registration form for a user
 	public class AddUserDialog extends JFrame{
+		//class scope variable declaration
 	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
         JTextField addUserFirstName, addUserLastName, addUserEmail;
         JPanel inputPanel, buttonPanel;
         JButton addUserDialogButton;
+        //constructor
         public AddUserDialog(){
+        	//boilerplate
             super("Add User");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new BorderLayout() );//ANONYMOUS layout object
             this.setSize(250,160);
             this.setLocationRelativeTo(null);
 
+            //gui stuff
             addUserFirstNameLabel = new JLabel("First Name:");
             addUserLastNameLabel = new JLabel("Last Name:");
             addUserEmailLabel = new JLabel("Email:");
@@ -358,22 +387,32 @@ public class LibrarySystemView extends JFrame
         }
     }
 	
+	//dialog box that opens when a user is checking out or in a new book
+	//two BIRDS, ONE STONE
 	public class LoanDialog extends JFrame{
+		//class scope variable declaration
 	    JLabel bookLabel;
 	    JComboBox<String> booksToChooseFrom, ISBNs, borrowers, borrowersIds;
 	    boolean isLoaning;
         JButton acceptButton;
+        //constructor
         public LoanDialog(){
+        	//boilerplate
             super("New Loan");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setLayout(new GridLayout(4,1, 3, 3) );//ANONYMOUS layout object
             this.setSize(500,200);
             this.setLocationRelativeTo(null);
-
+            
+            //we use this boolean to determine whether or not the user will be opening a new loan
+            //or closing a currently open loan on a book
             this.isLoaning = isLoaning;
             bookLabel = new JLabel("Choose a Book");
+            
+            //combobox list of the books available to choose from to check in out check out
             booksToChooseFrom = new JComboBox<String>();
             acceptButton = new JButton();
+            //combobox list of users to use for the check in our out process
             borrowers = new JComboBox<String>();
             borrowersIds = new JComboBox<String>();
             ISBNs = new JComboBox<String>();
@@ -383,13 +422,17 @@ public class LibrarySystemView extends JFrame
             this.add(borrowers);
             this.add(acceptButton);
         }
-
+        
+        //we use this method in the controller to determine the paramaters for the user to either
+        //check in, or be checking out a book
         public void openLoanDialog(boolean isLoaning, DefaultComboBoxModel<String> bookStrings, TableModel books, DefaultComboBoxModel<String> ISBNs, DefaultComboBoxModel<String> borrowers, DefaultComboBoxModel<String> borrowersIds){
             this.isLoaning = isLoaning;
             booksToChooseFrom.setModel(bookStrings);
             this.ISBNs.setModel(ISBNs);
             this.borrowers.setModel(borrowers);
             this.borrowersIds.setModel(borrowersIds);
+            
+            //modularity on our accept button depending on the user's action based on the boolean isLoaning
             if(isLoaning) {
                 acceptButton.setText("Check Out this Book");
             }else{

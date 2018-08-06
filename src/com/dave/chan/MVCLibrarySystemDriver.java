@@ -4,18 +4,17 @@ import javax.swing.*;
 
 /**
  * Program Name: MVCLibrarySystemDriver.java
- * Purpose: this is the driver class that gets everything up and running.
+ * Purpose: this is the driver class that gets everything up and running. yeet
  *
- * Coder: Bill Pulling for Sec02,ADAPTED from Derek Carnas' online Youtube video
- *        on MVC.
- * Date: Jul 12, 2016
+ * Coder: Evan Burgess & David Harris
+ * Date: August, 4th, 2018
  */
 
 public class MVCLibrarySystemDriver
 {
-
+	//Set styling to that of the computer
     private static void setLookAndFeel() {
-
+    	
         try	{
 
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -33,13 +32,13 @@ public class MVCLibrarySystemDriver
         // First, create objects of the view class and the model class
         LibrarySystemView theView = null;
         LibrarySystemModel theModel = null;
+        
         try {
             setLookAndFeel();
             theView = new LibrarySystemView();
             theModel = new LibrarySystemModel();
 
-            //NOW, create an object of the Controller class and pass it the view object
-            // and the model object
+            //Create an object of the Controller class and pass it the view object and the model object
             LibrarySystemController theController = new LibrarySystemController(theView, theModel);
         }catch (Exception e) {
             System.out.println(e.getMessage());
