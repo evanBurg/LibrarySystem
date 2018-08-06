@@ -12,7 +12,7 @@ import javax.swing.*;
 
 public class MVCLibrarySystemDriver
 {
-	//Set styling to that of the computer
+	//Set styling to windows look and feel
     private static void setLookAndFeel() {
     	
         try	{
@@ -27,6 +27,10 @@ public class MVCLibrarySystemDriver
 
     }
 
+    /**
+     * Entry point for the program
+     * @param args
+     */
     public static void main(String[] args)
     {
         // First, create objects of the view class and the model class

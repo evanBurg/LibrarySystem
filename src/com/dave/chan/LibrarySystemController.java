@@ -217,11 +217,31 @@ public class LibrarySystemController
                             chosenBooks.addElement(books.getValueAt(i, 1).toString());
                         }
                     }
-                    if(chosenBooks.getSize() == 0)
+
+                    borrowers = new DefaultComboBoxModel<String>();
+                    borrowersIds = new DefaultComboBoxModel<String>();
+
+                    if(chosenBooks.getSize() == 0) {
                         theModel.throwError("There are no books available for you to check in with your search criteria");
-                    else
+                    }else {
+                        String[] first = theModel.getBorrowersByISBN(bookISBNs.getElementAt(0), chosenBooks.getElementAt(0));
+                        if(first != null) {
+                            borrowers.addElement(first[0]);
+                            borrowersIds.addElement(first[1]);
+                        }
                         theView.loanDialog.openLoanDialog(false, chosenBooks, theView.getSearchTable(), bookISBNs, borrowers, borrowersIds);
+                    }
                 }
+            }
+            if(e.getSource().equals(theView.loanDialog.booksToChooseFrom) && !theView.loanDialog.isLoaning){
+                DefaultComboBoxModel<String> borrowers = new DefaultComboBoxModel<String>();
+                DefaultComboBoxModel<String> borrowersIds = new DefaultComboBoxModel<String>();
+                String[] first = theModel.getBorrowersByISBN(theView.loanDialog.getISBNfromBook(theView.loanDialog.getSelectedBookID()), theView.loanDialog.getSelectedBookTitle());
+                if(first != null) {
+                    borrowers.addElement(first[0]);
+                    borrowersIds.addElement(first[1]);
+                }
+                theView.loanDialog.openLoanDialog(false, theView.loanDialog.getBooksModel(), theView.getSearchTable(), theView.loanDialog.getISBNsModel(), borrowers, borrowersIds);
             }
             if(e.getSource().equals(theView.loanDialog.acceptButton)){
             	//when we hit the accept button determine our sleected book and switch their flags to -1(false)
@@ -231,9 +251,18 @@ public class LibrarySystemController
                 selectedBorrower = theView.loanDialog.getSelectedBorrowerID();
                 selectedBorrower = theView.loanDialog.getDatabaseBorrowerID(selectedBorrower);
                 String selectedISBN = theView.loanDialog.getISBNfromBook(selectedBook);
-                
+                int loanPeriod = -1;
+
+                if(theView.loanDialog.getSelectedLoanPeriod() == 0)
+                    loanPeriod = 7;
+                else if(theView.loanDialog.getSelectedLoanPeriod() == 1)
+                    loanPeriod = 14;
+                else if(theView.loanDialog.getSelectedLoanPeriod() == 2)
+                    loanPeriod = 21;
+
+
                 //we then use our model method to update our database with the newly checked in or out books 
-                theModel.checkABookInorOut(theView.loanDialog.isLoaning, selectedISBN, selectedBorrower);
+                theModel.checkABookInorOut(theView.loanDialog.isLoaning, selectedISBN, selectedBorrower, loanPeriod);
                 searchBooks();
                 
                 //hide our dialog window
@@ -293,9 +322,32 @@ public class LibrarySystemController
             	//populate our variables with the user's input from the view
             	String title = theView.addBookDialog.addBookTitle.getText();
             	String isbn = theView.addBookDialog.addBookISBN.getText();
-            	int edition = theView.addBookDialog.getBookEdition();
+            	String sEdition = theView.addBookDialog.getBookEdition();
+            	int edition = -1;
             	String subject = theView.addBookDialog.getSubject();
             	List<String> authors = theView.addBookDialog.getAuthorsSelectedList();
+
+            	//Error checking
+
+                //ISBN must be 13 chars long
+            	if(isbn.length() != 13){
+            	    theModel.throwError("Invalid ISBN! Must be a 13 digit long number.\nYour ISBN has " + isbn.length() + " characters.");
+            	    return;
+                }
+
+                //ISBN must be only numbers
+                if(!isbn.matches("\\d+")){
+                    theModel.throwError("Invalid ISBN! Must be a 13 digit long number.\nYour ISBN contains invalid characters.");
+                    return;
+                }
+
+                //Edition must be integer parseable
+                try {
+                    edition = Integer.parseInt(sEdition);
+                } catch (NumberFormatException ex) {
+                    theModel.throwError("Invalid Edition! Must be an integer");
+                    return;
+                }
             	
             	//call our models add new book method and bass in these variables
             	theModel.addNewBook(title,  isbn, edition, subject, authors);
