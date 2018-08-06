@@ -48,7 +48,10 @@ public class LibrarySystemView extends JFrame
     public AddBookDialog addBookDialog;
 
     public LoanDialog loanDialog;
-	
+
+    /**
+     * Construct the GUI
+     */
     public LibrarySystemView()
     {
         //boilerplate
@@ -87,8 +90,10 @@ public class LibrarySystemView extends JFrame
         this.setVisible(true);
 
     }//end constructor
-    
-    //method for the index portion of our app
+
+    /**
+     * Method for creating the index tab
+     */
     private void loadIndexView()
     {
     	//Gui setup
@@ -128,7 +133,10 @@ public class LibrarySystemView extends JFrame
 
          libraryTabbedPane.addTab("Index", retrievalPanel);
     }
-    
+
+    /**
+     * Method for creating the users tab
+     */
     private void loadUserView()
     {
     	//gui setup
@@ -157,7 +165,10 @@ public class LibrarySystemView extends JFrame
        
         libraryTabbedPane.add("Users", usersPanel);
     }
-    
+
+    /**
+     * Method for creating the search tab
+     */
     private void loadSearchView()
     {
     	//gui setup
@@ -201,9 +212,10 @@ public class LibrarySystemView extends JFrame
         
         libraryTabbedPane.addTab("Search", searchPanel);
     }
-    
-    //When we have a button clicked we fire off a listener to all buttons and in our controller we will
-    //parse through and delegate the events properly.
+
+    /**
+     * Method to add action listeners to all components that need one
+     */
 	public void addListener(ActionListener generalListener )
 	{
 		//User Tab Button Listeners
@@ -223,6 +235,7 @@ public class LibrarySystemView extends JFrame
         //Search Tab Button Listeners
         subjectComboBox.addActionListener(generalListener);
         authorComboBox.addActionListener(generalListener);
+        loanDialog.booksToChooseFrom.addActionListener(generalListener);
         loanDialog.acceptButton.addActionListener(generalListener);
         searchCheckInBtn.addActionListener(generalListener);
         searchCheckOutBtn.addActionListener(generalListener);
@@ -231,8 +244,10 @@ public class LibrarySystemView extends JFrame
         exit.addActionListener(generalListener);
         help.addActionListener(generalListener);
 	}
-	
-	//this dialog window pops up when we use the add book jbutton
+
+    /**
+     * Inner class for the add book dialog
+     */
 	public class AddBookDialog extends JFrame{
 		//variable declarations in this class's scope
 	    JLabel addBookTitleLabel, addBookSubjectLabel, addBookEditionLabel, addBookAuthorLabel, addBookISBNLabel;
@@ -362,8 +377,8 @@ public class LibrarySystemView extends JFrame
         }
 
         //Get the edition field text
-        public int getBookEdition(){
-            return Integer.parseInt(addBookEdition.getText());
+        public String getBookEdition(){
+            return addBookEdition.getText();
         }
 
         //Get the subject field text
@@ -385,8 +400,10 @@ public class LibrarySystemView extends JFrame
             addAuthorTxtFld.setText("");
         }
     }
-	
-	//dialog window that pops up to provide a new registration form for a user
+
+    /**
+     * Inner class for the add user dialog
+     */
 	public class AddUserDialog extends JFrame{
 		//class scope variable declaration
 	    JLabel addUserFirstNameLabel, addUserLastNameLabel, addUserEmailLabel;
@@ -455,13 +472,14 @@ public class LibrarySystemView extends JFrame
             addUserEmail.setText("");
         }
     }
-	
-	//dialog box that opens when a user is checking out or in a new book
-	//two BIRDS, ONE STONE
+
+    /**
+     * Inner class for the add loan dialog
+     */
 	public class LoanDialog extends JFrame{
 		//class scope variable declaration
 	    JLabel bookLabel;
-	    JComboBox<String> booksToChooseFrom, ISBNs, borrowers, borrowersIds;
+	    JComboBox<String> booksToChooseFrom, ISBNs, borrowers, borrowersIds, loanPeriod;
 	    boolean isLoaning;
         JButton acceptButton;
         //constructor
@@ -469,7 +487,7 @@ public class LibrarySystemView extends JFrame
         	//boilerplate
             super("New Loan");
             this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-            this.setLayout(new GridLayout(4,1, 3, 3) );//ANONYMOUS layout object
+            this.setLayout(new GridLayout(5,1, 3, 3) );//ANONYMOUS layout object
             this.setSize(500,200);
             this.setLocationRelativeTo(null);
             
@@ -485,10 +503,14 @@ public class LibrarySystemView extends JFrame
             borrowers = new JComboBox<String>();
             borrowersIds = new JComboBox<String>();
             ISBNs = new JComboBox<String>();
-
+            loanPeriod = new JComboBox<String>();
+            loanPeriod.addItem("One Week");
+            loanPeriod.addItem("Two Weeks");
+            loanPeriod.addItem("Three Weeks");
             this.add(bookLabel);
             this.add(booksToChooseFrom);
             this.add(borrowers);
+            this.add(loanPeriod);
             this.add(acceptButton);
         }
         
@@ -500,20 +522,37 @@ public class LibrarySystemView extends JFrame
             this.ISBNs.setModel(ISBNs);
             this.borrowers.setModel(borrowers);
             this.borrowersIds.setModel(borrowersIds);
+            loanDialog.remove(acceptButton);
             
             //modularity on our accept button depending on the user's action based on the boolean isLoaning
             if(isLoaning) {
+                loanDialog.add(loanPeriod);
+                loanDialog.add(acceptButton);
+                loanDialog.revalidate();
                 acceptButton.setText("Check Out this Book");
             }else{
+                loanDialog.remove(loanPeriod);
+                loanDialog.add(acceptButton);
+                loanDialog.revalidate();
                 acceptButton.setText("Check In this Book");
             }
             this.setVisible(true);
+        }
+
+        public int getSelectedLoanPeriod(){
+            return loanPeriod.getSelectedIndex();
         }
 
         //Get the ID of the selected book in the jcombobox
         public int getSelectedBookID(){
             return booksToChooseFrom.getSelectedIndex();
         }
+
+        public String getSelectedBookTitle(){ return booksToChooseFrom.getSelectedItem().toString(); }
+
+        public DefaultComboBoxModel<String> getBooksModel(){ return (DefaultComboBoxModel<String>)booksToChooseFrom.getModel(); }
+
+        public DefaultComboBoxModel<String> getISBNsModel(){ return (DefaultComboBoxModel<String>)ISBNs.getModel(); }
 
         //Get the ID of the selected borrower in the jcombobox
         public int getSelectedBorrowerID(){

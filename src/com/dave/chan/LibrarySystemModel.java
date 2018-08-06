@@ -361,6 +361,41 @@ public class LibrarySystemModel
         }
     }
 
+    public String[] getBorrowersByISBN(String isbn, String title){
+        PreparedStatement query = null;
+        ResultSet user = null;
+
+        try{
+            //query to get our specific set of books
+            query = connection.prepareStatement("SELECT first_name, Borrower_ID FROM book INNER JOIN book_loan ON book.BookID = book_loan.Book_BookID INNER JOIN borrower ON book_loan.Borrower_Borrower_ID = borrower.Borrower_ID WHERE ISBN = ? AND date_returned IS NULL");
+
+            //prepared statement parameters
+            query.setString(1, isbn);
+            user = query.executeQuery();
+            String[] userName = new String[2];
+
+            if(user.next()) {
+                userName[0] = user.getString("first_name");
+                userName[1] = user.getString("Borrower_ID");
+            }else {
+                throwError("No users have the book: '" + title + "' checked out.");
+            }
+
+            if(user != null)
+                user.close();
+            if(query != null)
+                query.close();
+
+            return userName;
+        }catch (Exception ex){
+            throwError(ex.getMessage());
+            System.out.println("Exception: " + ex.getMessage());
+            ex.printStackTrace();
+
+            return null;
+        }
+    }
+
     /**
      * Gets all books from the database by a specific subject and author
      * @param author The author to search by
@@ -465,7 +500,7 @@ public class LibrarySystemModel
      * @param BorrowerId The person to check in or out the book
      * @return Whether or not the operation was successful.
      */
-    public boolean checkABookInorOut(boolean isCheckingOut, String ISBN, int BorrowerId){
+    public boolean checkABookInorOut(boolean isCheckingOut, String ISBN, int BorrowerId, int loanPeriod){
         Statement query = null;
         ResultSet bookID = null;
         try{
@@ -485,7 +520,7 @@ public class LibrarySystemModel
                     query.executeUpdate("UPDATE Book SET Available = 1 WHERE ISBN = '"+ ISBN +"'");
             }else{
             	//otherwise we assume they are checking out so set the due date and toggle availability to false
-                query.executeUpdate("INSERT INTO book_loan(Book_BookID, Borrower_Borrower_ID, Comment, date_out, date_due) VALUES("+BookID+", "+ BorrowerId +", DATE_FORMAT(CURDATE(), 'Borrowed on %M %e, %Y'), CURDATE(), DATE_ADD(CURDATE(), INTERVAL 14 DAY))");
+                query.executeUpdate("INSERT INTO book_loan(Book_BookID, Borrower_Borrower_ID, Comment, date_out, date_due) VALUES("+BookID+", "+ BorrowerId +", DATE_FORMAT(CURDATE(), 'Borrowed on %M %e, %Y'), CURDATE(), DATE_ADD(CURDATE(), INTERVAL "+ loanPeriod +" DAY))");
                 query.executeUpdate("UPDATE Book SET Available = 0 WHERE ISBN = '"+ ISBN +"'");
             }
 
