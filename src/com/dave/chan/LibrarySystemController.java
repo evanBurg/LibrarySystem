@@ -169,6 +169,13 @@ public class LibrarySystemController
             if(e.getSource().equals(theView.addUserDialog.addUserDialogButton)){
             	//if our user dialog button is hit, we hid our user form and use our add new user method to create a new entry
             	//reload our user list to display it through the loadUsers() method
+
+                //Validate Email
+                if(!theView.addUserDialog.getEmail().matches("^((([!#$%&'*+\\-/=?^_`{|}~\\w])|([!#$%&'*+\\-/=?^_`{|}~\\w][!#$%&'*+\\-/=?^_`{|}~\\.\\w]{0,}[!#$%&'*+\\-/=?^_`{|}~\\w]))[@]\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*)$")){
+                    theModel.throwError("Invalid Email! Please enter a valid email address");
+                    return;
+                }
+
                 theView.addUserDialog.setVisible(false);
                 addNewUser(theView.addUserDialog.getFirstName(), theView.addUserDialog.getLastName(), theView.addUserDialog.getEmail());
                 loadUsers();
