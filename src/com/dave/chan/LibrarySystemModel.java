@@ -1,15 +1,11 @@
 package com.dave.chan;
 
 import javax.swing.*;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.sql.*;
 import java.util.List;
 import java.util.Vector;
@@ -33,6 +29,9 @@ public class LibrarySystemModel
     private DefaultTableModel overdueBooks;
     private Connection connection;
 
+    /**
+     * Public constructor
+     */
     public LibrarySystemModel(){
     	//try to establish our db connection as well as load in our initial data through these methods
         try {
@@ -46,35 +45,56 @@ public class LibrarySystemModel
             e.printStackTrace();
         }
     }
-    
-    //public method calls for the controller to implement
+
+    /**
+     * Updates the authors member and then returns the data
+     * @return authors The authors for a combobox
+     */
     public DefaultComboBoxModel<String> getAuthors(){
         getAllAuthors();
         return authors;
     }
 
+    /**
+     * Updates the borrowers member and then returns the data
+     * @return users The borrowers
+     */
     public DefaultTableModel getUsers(){
         getAllBorrowers();
         return users;
     }
-    
+
+    /**
+     * Updates the overdue books member and then returns the data
+     * @return overdueBooks The overdue books
+     */
     public DefaultTableModel getOverdue()
     {
     	getOverdueBooks();
     	return overdueBooks;
     }
 
+    /**
+     * Updates the loaned books member and then returns the data
+     * @return loans The loaned books
+     */
     public DefaultTableModel getLoans(){
         getAllLoanedBooks();
         return loans;
     }
 
+    /**
+     * Updates the books member and then returns the data
+     * @return books All books in the library
+     */
     public DefaultTableModel getBooks(){
         getAllBooks();
         return books;
     }
-    
-    //how we close our db connection
+
+    /**
+     * Method to close the database connection
+     */
     public void closeConnection(){
         try {
             if (!connection.isClosed())
@@ -84,17 +104,23 @@ public class LibrarySystemModel
             e.printStackTrace();
         }
     }
-    
-    //some generic error handling
-    private void throwError(String message){
+
+    /**
+     * Error handling
+     * @param message The error message
+     */
+    public void throwError(String message){
         JFrame frame = new JFrame();
         JOptionPane.showMessageDialog(frame,
                 message,
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
     }
-    
-    //displays help for the user in the view
+
+    /**
+     * Displays a help dialog for a given tab number
+     * @param tabOpen Which tab is open
+     */
     public void displayHelp(int tabOpen){
         JFrame frame = new JFrame();
         String message = "";
@@ -113,8 +139,12 @@ public class LibrarySystemModel
                 "Help",
                 JOptionPane.INFORMATION_MESSAGE);
     }
-    
-    //this will take our boolean available column and alter it to more user friendly text
+
+    /**
+     * Converts the available column from the string "1" or "0" to "Yes" or "No"
+     * @param tableModel The table model to convert the strings from
+     * @return A table model with the strings converted
+     */
     private DefaultTableModel convertAvailabletoTrueorFalse(DefaultTableModel tableModel){
         for (int i = 0; i < tableModel.getRowCount(); i++){
             Object element = tableModel.getValueAt(i, 5);
@@ -127,8 +157,12 @@ public class LibrarySystemModel
 
         return tableModel;
     }
-    
-    //a method that will parse through a resultset object and return a defaultablemodel object
+
+    /**
+     * Converts a result set into a table model
+     * @param rs The result set to convert
+     * @return A table model representing the result set
+     */
     private DefaultTableModel returnTableModelFromResultSet(ResultSet rs) {
         try {
             ResultSetMetaData metaData = rs.getMetaData();
@@ -162,8 +196,10 @@ public class LibrarySystemModel
             return null;
         }
     }
-    
-    //method to return all books
+
+    /**
+     * Gets all books from the database and places them in the member variable
+     */
     private void getAllBooks(){
         Statement query = null;
         ResultSet booksrs = null;
@@ -190,8 +226,10 @@ public class LibrarySystemModel
             ex.printStackTrace();
         }
     }
-    
-    //method to get all books currently on loan
+
+    /**
+     * Gets all loaned books from the database and places them in the member variable
+     */
     private void getAllLoanedBooks(){
         Statement query = null;
         ResultSet books = null;
@@ -215,8 +253,10 @@ public class LibrarySystemModel
             ex.printStackTrace();
         }
     }
-    
-    //method to get all book subjects from the db
+
+    /**
+     * Gets all subjects from the database and places them in the member variable
+     */
     public DefaultComboBoxModel getAllSubjects(){
         Statement query = null;
         ResultSet books = null;
@@ -251,8 +291,10 @@ public class LibrarySystemModel
             return null;
         }
     }
-    
-    //method to get all author information
+
+    /**
+     * Gets all authors from the database and places them in the member variable
+     */
     private void getAllAuthors(){
         Statement query = null;
         ResultSet authorsrs = null;
@@ -286,8 +328,11 @@ public class LibrarySystemModel
             ex.printStackTrace();
         }
     }
-    
-    //method to return a select number of books from our db based on the subject argument
+
+    /**
+     * Gets all books from the database by a specific subject
+     * @param subject The subject to search by
+     */
     public DefaultTableModel getBooksbySubject(String subject){
         Statement query = null;
         ResultSet books = null;
@@ -315,8 +360,12 @@ public class LibrarySystemModel
             return null;
         }
     }
-    
-    //method for when the user in the view wants a book based on the author and the subject
+
+    /**
+     * Gets all books from the database by a specific subject and author
+     * @param author The author to search by
+     * @param subject The subject to search by
+     */
     public DefaultTableModel getBooksByAuthorAndSubject(String author, String subject){
         PreparedStatement query = null;
         ResultSet books = null;
@@ -327,8 +376,16 @@ public class LibrarySystemModel
             
             //we split apart the author string passed in, in order to separate the first and last name
             String[] name = author.trim().split("\\s*,\\s*");
-            String first = name[1];
-            String last = name[0];
+            String first = "";
+            String last = "";
+
+            //make sure the author's name is in the correct format based on the string split above this comment
+            if(name.length == 2) {
+                first = name[1];
+                last = name[0];
+            }else{
+                throwError("Invalid Author Name");
+            }
             
             //prepared statement parameters
             query.setString(1, last);
@@ -354,8 +411,11 @@ public class LibrarySystemModel
             return null;
         }
     }
-    
-    //method to get a list of books based on an author's name
+
+    /**
+     * Gets all books from the database by a specific author
+     * @param author The subject to search by
+     */
     public DefaultTableModel getBooksbyAuthor(String author){
         PreparedStatement query = null;
         ResultSet books = null;
@@ -397,13 +457,19 @@ public class LibrarySystemModel
             return null;
         }
     }
-    
-    //method for checking a book in or out
+
+    /**
+     * Method to check in or out a book
+     * @param isCheckingOut Whether we are checking in or out the book
+     * @param ISBN The book's ISBN (Unique identifier)
+     * @param BorrowerId The person to check in or out the book
+     * @return Whether or not the operation was successful.
+     */
     public boolean checkABookInorOut(boolean isCheckingOut, String ISBN, int BorrowerId){
         Statement query = null;
         ResultSet bookID = null;
         try{
-        	//query to get our specific book as well as it's id
+        	//query to get our specific book's ID
             query = connection.createStatement();
             bookID = query.executeQuery("SELECT BookID FROM Book WHERE ISBN = '"+ ISBN +"'");
             int BookID = 0;
@@ -436,8 +502,10 @@ public class LibrarySystemModel
         }
         return false;
     }
-    
-    //get all borrowing users from the database
+
+    /**
+     * Get all borrowers from the database and place them in the member variable
+     */
     private void getAllBorrowers(){
         Statement query = null;
         ResultSet borrowers = null;
@@ -460,7 +528,11 @@ public class LibrarySystemModel
         }
     }
 
-    //method to update our database with new borrowers
+    /**
+     * Method to update the borrowers in the database, since you can edit multiple rows in the table at a time it takes a whole table model
+     * @param model The information to put in the database
+     * @return Whether the operation was succesful or not
+     */
     public boolean updateBorrowers(DefaultTableModel model){
         PreparedStatement query = null;
 
@@ -494,8 +566,14 @@ public class LibrarySystemModel
             return false;
         }
     }
-    
-    //method to update our database with new user information
+
+    /**
+     * Method to add a new borrower to the database
+     * @param first The first name
+     * @param last The last name
+     * @param email The email
+     * @return Whether or not the operation was successful
+     */
     public boolean addNewBorrower(String first, String last, String email){
         Statement query = null;
         try{
@@ -515,8 +593,10 @@ public class LibrarySystemModel
             return false;
         }
     }
-    
-    //will return a list of the overdue books from our database
+
+    /**
+     * Method to get all overdue books and set the member variable
+     */
     private void getOverdueBooks(){
         Statement query = null;
         ResultSet books = null;
@@ -544,8 +624,13 @@ public class LibrarySystemModel
             ex.printStackTrace();
         }
     }
-    
-    //method that will update our db with a new author
+
+    /**
+     * Method for adding a new author
+     * @param first_name Their first name
+     * @param last_name Their last name
+     * @return Whether the operation was successful or not
+     */
     public boolean addNewAuthor(String first_name, String last_name){
         PreparedStatement query = null;
 
@@ -567,8 +652,16 @@ public class LibrarySystemModel
             return false;
         }
     }
-    
-    //method that will update our sql database with a new book listing
+
+    /**
+     * Method to add a new book
+     * @param title The book title
+     * @param isbn The book ISBN
+     * @param edition The book edition
+     * @param subject The book subject
+     * @param Authors The book authors
+     * @return Whether or not the operation was successful
+     */
     public boolean addNewBook(String title, String isbn, int edition, String subject, List<String> Authors){
         PreparedStatement query = null;
         ResultSet authors = null;
