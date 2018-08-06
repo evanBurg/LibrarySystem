@@ -266,9 +266,18 @@ public class LibrarySystemController
             		//get the text from the field and split it based on the comma so we get the first and last name of the author in 
             		//separate variables
             		String author = theView.addBookDialog.getAddAuthorText();
-                	String split[] = author.split("\\s*,\\s*");
-                    String first = split[1];
-                    String last = split[0];
+                	String name[] = author.split("\\s*,\\s*");
+                    String first = "";
+                    String last = "";
+
+                    //make sure the author's name is in the correct format based on the string split above this comment
+                    if(name.length == 2) {
+                        first = name[1];
+                        last = name[0];
+                    }else{
+                        theModel.throwError("Invalid Author Name.\nName must be Last and First separated by a comma");
+                        return;
+                    }
                     
                     //update our model with the new author
                     theModel.addNewAuthor(first, last);

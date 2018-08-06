@@ -376,8 +376,16 @@ public class LibrarySystemModel
             
             //we split apart the author string passed in, in order to separate the first and last name
             String[] name = author.trim().split("\\s*,\\s*");
-            String first = name[1];
-            String last = name[0];
+            String first = "";
+            String last = "";
+
+            //make sure the author's name is in the correct format based on the string split above this comment
+            if(name.length == 2) {
+                first = name[1];
+                last = name[0];
+            }else{
+                throwError("Invalid Author Name");
+            }
             
             //prepared statement parameters
             query.setString(1, last);
