@@ -10,46 +10,44 @@ package com.dave.chan;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.ComboPopup;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import java.util.List;
 
 public class LibrarySystemView extends JFrame
 {
 	//class-wide
-	JTabbedPane libraryTabbedPane;
+    private JTabbedPane libraryTabbedPane;
 	
-	JComboBox authorComboBox, subjectComboBox;
-		
-	JPanel basePanel, usersPanel, usersButtonPanel, retrievalPanel, hubBtnPanel, retrievalBtnPanel, searchPanel, 
+	private JComboBox authorComboBox, subjectComboBox;
+
+    private JPanel basePanel, usersPanel, usersButtonPanel, retrievalPanel, hubBtnPanel, retrievalBtnPanel, searchPanel,
 				searchUIPanel, searchButtonPanel, addBookPanel;
-	
-	JTable usersTable, retrievalTable, searchTable;
-	
-	JScrollPane userTableScrollPane, retrievalTableScrollPane, searchTableScrollPane;
-	
-	JButton usersSaveButton, usersUpdateButton, usersNewButton, 
-			searchCheckOutBtn, searchCheckInBtn, retrievalOverdueButton,
-			retrievalBooksOnLoanButton, retrievalBooksButton, addBookBtn;
-	
-	JLabel searchInfoLabel;
 
-    JMenuBar menubar;
-    JMenu file;
-    JMenuItem exit, help;
+    private JTable usersTable, retrievalTable, searchTable;
 
-    Border greenBorder, emptyBorder;
+    private JScrollPane userTableScrollPane, retrievalTableScrollPane, searchTableScrollPane;
 
-	AddUserDialog addUserDialog;
-	
-	AddBookDialog addBookDialog;
-	
-	LoanDialog loanDialog;
+    private JLabel searchInfoLabel;
+
+    public JButton usersSaveButton, usersUpdateButton, usersNewButton,
+            searchCheckOutBtn, searchCheckInBtn, retrievalOverdueButton,
+            retrievalBooksOnLoanButton, retrievalBooksButton, addBookBtn;
+
+    public JMenuBar menubar;
+    public JMenu file;
+    public JMenuItem exit, help;
+
+    public Border greenBorder, emptyBorder;
+
+    public AddUserDialog addUserDialog;
+
+    public AddBookDialog addBookDialog;
+
+    public LoanDialog loanDialog;
 	
     public LibrarySystemView()
     {
@@ -339,6 +337,53 @@ public class LibrarySystemView extends JFrame
             this.add(basePanel, BorderLayout.CENTER);
             this.add(buttonPanel, BorderLayout.SOUTH);
         }
+
+        //GETTERS AND SETTERS
+
+        //Set the author list model
+        public void setAddBookAuthorList(DefaultComboBoxModel<String> model){
+            model.removeElementAt(0);
+            addBookAuthorList.setModel(model);
+        }
+
+        //Get the author field text
+        public String getAddAuthorText(){
+            return addAuthorTxtFld.getText();
+        }
+
+        //Get the book field text
+        public String getBookTitle(){
+            return addBookTitle.getText();
+        }
+
+        //Get the ISBN field text
+        public String getBookISBN(){
+            return addBookISBN.getText();
+        }
+
+        //Get the edition field text
+        public int getBookEdition(){
+            return Integer.parseInt(addBookEdition.getText());
+        }
+
+        //Get the subject field text
+        public String getSubject(){
+            return addBookSubject.getText();
+        }
+
+        //Get the selected authors
+        public List<String> getAuthorsSelectedList(){
+            return addBookAuthorList.getSelectedValuesList();
+        }
+
+        //Clear all the fields
+        public void clearFields(){
+            addBookTitle.setText("");
+            addBookSubject.setText("");
+            addBookEdition.setText("");
+            addBookISBN.setText("");
+            addAuthorTxtFld.setText("");
+        }
     }
 	
 	//dialog window that pops up to provide a new registration form for a user
@@ -384,6 +429,30 @@ public class LibrarySystemView extends JFrame
             buttonPanel = new JPanel();
             buttonPanel.add(addUserDialogButton);
             this.add(buttonPanel, BorderLayout.SOUTH);
+        }
+
+        //GETTERS AND SETTERS
+
+        //Get the first name text
+        public String getFirstName(){
+            return addUserFirstName.getText();
+        }
+
+        //Get the last name text
+        public String getLastName(){
+            return addUserLastName.getText();
+        }
+
+        //Get the email text
+        public String getEmail(){
+            return addUserEmail.getText();
+        }
+
+        //Clear all the fields
+        public void clearFields(){
+            addUserFirstName.setText("");
+            addUserLastName.setText("");
+            addUserEmail.setText("");
         }
     }
 	
@@ -440,6 +509,139 @@ public class LibrarySystemView extends JFrame
             }
             this.setVisible(true);
         }
+
+        //Get the ID of the selected book in the jcombobox
+        public int getSelectedBookID(){
+            return booksToChooseFrom.getSelectedIndex();
+        }
+
+        //Get the ID of the selected borrower in the jcombobox
+        public int getSelectedBorrowerID(){
+            return borrowers.getSelectedIndex();
+        }
+
+        //Get the ID of the selected borrower in the database
+        public int getDatabaseBorrowerID(int selectedBorrower){
+            return Integer.parseInt(borrowersIds.getItemAt(selectedBorrower));
+        }
+
+        //Get the ISBN of the selected book in the database
+        public String getISBNfromBook(int selectedBook){
+            return ISBNs.getItemAt(selectedBook);
+        }
+    }
+
+    //GETTERS AND SETTERS
+
+    //Get the list of authors from the jcombobox
+    public ComboBoxModel<String> getAuthorComboList(){
+        return authorComboBox.getModel();
+    }
+
+    //Get the users in the users table
+    public DefaultTableModel getUsersTable(){
+        return (DefaultTableModel)usersTable.getModel();
+    }
+
+    //Set the users in the users table
+    public void setUsersTable(DefaultTableModel tbl, String[] columnHeaders){
+        //Set the headers
+        tbl.setColumnIdentifiers(columnHeaders);
+        usersTable.setModel(tbl);
+
+        //Remove the ID column
+        if(tbl.getRowCount() > 0) {
+            TableColumnModel tcm = usersTable.getColumnModel();
+            tcm.removeColumn(tcm.getColumn(0));
+        }
+    }
+
+    //Set the index table
+    public void setIndexTable(DefaultTableModel tbl, String[] columnHeaders){
+        //Set the headers
+        tbl.setColumnIdentifiers(columnHeaders);
+        retrievalTable.setModel(tbl);
+
+        //Remove the ID column
+        if(tbl.getRowCount() > 0) {
+            TableColumnModel tcm = retrievalTable.getColumnModel();
+            tcm.removeColumn(tcm.getColumn(0));
+        }
+    }
+
+    //Set the search table
+    public void setSearchTable(DefaultTableModel tbl){
+        searchTable.setModel(tbl);
+        //Remove the ID column
+        if(tbl.getRowCount() > 0) {
+            TableColumnModel tcm = searchTable.getColumnModel();
+            tcm.removeColumn(tcm.getColumn(0));
+        }
+    }
+
+    //Get the search table
+    public DefaultTableModel getSearchTable(){
+        return (DefaultTableModel)searchTable.getModel();
+    }
+
+    //Set the subject combobox
+    public void setSubjectComboBox(ComboBoxModel<String> model){
+        subjectComboBox.setModel(model);
+    }
+
+    //Get the subject combo box model
+    public ComboBoxModel<String> getSubjectComboBox(){
+        return subjectComboBox.getModel();
+    }
+
+    //Get the selected item from the subject combo box
+    public String getSubjectComboBoxSelected(){
+        return subjectComboBox.getSelectedItem().toString();
+    }
+
+    //Get the subject combobox itself
+    public JComboBox getSubjectBoxObject(){
+        return subjectComboBox;
+    }
+
+    //Get the author combobox itself
+    public JComboBox getAuthorBoxObject(){
+        return authorComboBox;
+    }
+
+    //Set the author combobox
+    public void setAuthorComboBox(ComboBoxModel<String> model){
+        authorComboBox.setModel(model);
+    }
+
+    //Get the author combobox model
+    public ComboBoxModel<String> getAuthorComboBox(){
+        return authorComboBox.getModel();
+    }
+
+    //Get the selected item in the author combobox
+    public String getAuthorComboBoxSelected(){
+        return authorComboBox.getSelectedItem().toString();
+    }
+
+    //Set the users table border green for when editing
+    public void setUsersBorderGreen(){
+        userTableScrollPane.setBorder(greenBorder);
+    }
+
+    //Enable or disable the users table for editing
+    public void enableDisableUsersTable(boolean enable){
+        usersTable.setEnabled(enable);
+    }
+
+    //Remove the green border
+    public void removeUsersBorder(){
+        userTableScrollPane.setBorder(emptyBorder);
+    }
+
+    //Return the open tab for the help dialog
+    public int getOpenTab(){
+        return libraryTabbedPane.getSelectedIndex();
     }
 
 }//end class
