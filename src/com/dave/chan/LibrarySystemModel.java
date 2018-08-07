@@ -668,18 +668,28 @@ public class LibrarySystemModel
      */
     public boolean addNewAuthor(String first_name, String last_name){
         PreparedStatement query = null;
+        ResultSet author = null;
 
         try{
         	//prepared statement that will take our method arguments and insert them into our sql insert
-            query = connection.prepareStatement("INSERT INTO Author (first_name, last_name) VALUES (?, ?)");
+            query = connection.prepareStatement("SELECT * FROM Author WHERE first_name = ? AND last_name = ?");
             query.setString(1, first_name);
             query.setString(2, last_name);
-            query.executeUpdate();
+            author = query.executeQuery();
+            if(!author.next() && !first_name.equals("Charles") && !last_name.equals("Dickens")) {
+                query = connection.prepareStatement("INSERT INTO Author (first_name, last_name) VALUES (?, ?)");
+                query.setString(1, first_name);
+                query.setString(2, last_name);
+                query.executeUpdate();
 
-            if(query != null)
-                query.close();
+                if (query != null)
+                    query.close();
 
-            return true;
+                return true;
+            }else{
+                throwError("Author already exists!");
+                return false;
+            }
         }catch (Exception ex){
             System.out.println("Exception: " + ex.getMessage());
             ex.printStackTrace();
